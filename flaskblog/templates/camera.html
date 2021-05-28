@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <div>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('cameras.update_camera', camera_id=camera.ID) }}">Update</a>
+        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+      </div>
+    </div>
+    <h4 class="article-title">NodeName: <a href="{{ url_for('cameras.camera_images', camera_id=camera.ID) }}">{{ camera.NodeName }}</a></h4>
+    <p class="article-content"><b>ViewName:</b> {{ camera.ViewName }}</p>
+    <p class="article-content"><b>Camera Type:</b> {{ camera.CameraType }}</p>
+    <p class="article-content"><b>Display:</b> {{ camera.Display }}</p>
+    <p class="article-content"><b>Check Objects:</b> {{ camera.Chk_Objects }}</p>
+    <p class="article-content"><b>ALPR Enabled:</b> {{ camera.ALPR }}</p>
+    <p class="article-content"><b>ROI Name:</b> {{ camera.ROI_name }}</p>
+    <p class="article-content"><b>Message:</b> {{ camera.Message }}</p>
+    <p class="article-content"><b>Twilio Enabled:</b> {{ camera.Twilio_Enabled }}</p>
+  </div>
+</article>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <form action="{{ url_for('cameras.delete_camera', camera_id=camera.ID) }}" method="POST">
+          <input class="btn btn-danger" type="submit" value="Delete">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

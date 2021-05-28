@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h4 class="mb-3">{{ title }}</h4>
+    <div class="container gallery-container">
+        <div class="tz-gallery">
+            <div class="row">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr class="small"><th class="px-2" scope="col">datetime</th><th class="px-2" scope="col">hubEvent</th><th class="px-2" scope="col">Event</th><th class="px-2" scope="col">Value</th><th class="px-2" scope="col">ROI_name</th></tr>
+                    {% for event in events.items %}
+                    <tr class="small"><th class="px-2" scope="row">{{ event.datetime }}</th><td class="px-2">{{ event.hubEvent }}</td><td class="px-2">{{ event.Event }}</td><td class="px-2">{{ event.Value }}</td><td class="px-2">{{ event.ROI_name }}</td></tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    {% for page_num in events.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+    {% if events.page == page_num %}
+    <a class="btn btn-info mb-4" href="{{ url_for('events.events_list', page=page_num) }}">{{ page_num }}</a>
+    {% else %}
+    <a class="btn btn-outline-info mb-4" href="{{ url_for('events.events_list', page=page_num) }}">{{ page_num }}</a>
+    {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock content %}
+

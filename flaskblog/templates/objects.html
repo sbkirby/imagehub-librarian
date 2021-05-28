@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h4 class="mb-3">{{ title }}</h4>
+    <div class="container gallery-container">
+        <div class="tz-gallery">
+            <div class="row">
+                {% for object in objects.items %}
+                <div class="btn btn-outline-info btn-lg mb-2 mr-2 col-sm">
+                    {% if request.args.get('link_id') == "images" %}
+                    <a class="article-title" href="{{ url_for('objects.object_images', object_id=object.ID) }}">{{ object.ObjectName }}</a>
+                    {% elif request.args.get('link_id') == "update" %}
+                    <a class="article-title" href="{{ url_for('objects.object', object_id=object.ID) }}">{{ object.ObjectName }}</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+  <h4 class="mb-3">{{ title }}</h4>
+  <div class="container gallery-container">
+    <div class="tz-gallery">
+      <div class="row">
+        {% for image in alprs.items %}
+        <div class="col-sm-6 col-md-4">
+          {% if request.args.get('link_id') == "images" %}
+          <table>
+            <tbody>
+            <tr><td>
+              <a class="lightbox"  href="{{ url_for('static', filename='imagehub_data/images/' + image.datetime.strftime('%Y-%m-%d') + '/' + image.image_id) }}">
+                <img style="margin-bottom: 0px;" src="{{ url_for('static', filename='imagehub_data/images/' + image.datetime.strftime('%Y-%m-%d') + '/' + image.image_id) }}">
+              </a>
+            </td></tr>
+            <tr><td style="text-align:center; font-size:65%"><b>{{ image.licenseplates.license }}</b> - {{ image.datetime.strftime('%Y-%m-%d %X') }}</td></tr>
+          </table>
+          {% elif request.args.get('link_id') == "update" %}
+          <table>
+            <tbody>
+            <tr><td>
+              <a class="lightbox"  href="{{ url_for('static', filename='imagehub_data/images/' + image.datetime.strftime('%Y-%m-%d') + '/' + image.image_id) }}">
+                <img style="margin-bottom: 0px;" src="{{ url_for('static', filename='imagehub_data/images/' + image.datetime.strftime('%Y-%m-%d') + '/' + image.image_id) }}">
+              </a>
+            </td></tr>
+            <tr><td style="text-align:center; font-size:65%"><b><a class="article-title" href="{{ url_for('alprs.alpr', alpr_id=image.ID) }}">{{ image.licenseplates.license }}</a></b> - {{ image.datetime.strftime('%Y-%m-%d %X') }}</td></tr>
+          </table>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% for page_num in alprs.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+  {% if page_num %}
+  {% if alprs.page == page_num %}
+  <a class="btn btn-info mb-4" href="{{ url_for('alprs.alprs_list', page=page_num, link_id=request.args.get('link_id')) }}">{{ page_num }}</a>
+  {% else %}
+  <a class="btn btn-outline-info mb-4" href="{{ url_for('alprs.alprs_list', page=page_num, link_id=request.args.get('link_id')) }}">{{ page_num }}</a>
+  {% endif %}
+  {% else %}
+  ...
+  {% endif %}
+  {% endfor %}
+</div>
+{% endblock content %}

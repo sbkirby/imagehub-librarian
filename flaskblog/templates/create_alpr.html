@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+            <div class="form-group">
+                {{ form.license_id.label(class="form-control-label") }}
+                {% if form.license_id.errors %}
+                    {{ form.license_id(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.license_id.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.license_id(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.datetime.label(class="form-control-label") }}
+                {% if form.datetime.errors %}
+                    {{ form.datetime(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.datetime.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.datetime(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.image_id.label(class="form-control-label") }}
+                {% if form.image_id.errors %}
+                    {{ form.image_id(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.image_id.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.image_id(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.processing_time.label(class="form-control-label") }}
+                {% if form.processing_time.errors %}
+                    {{ form.processing_time(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.processing_time.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.processing_time(class="form-control") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}

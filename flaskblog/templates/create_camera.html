@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+            <div class="form-group">
+                {{ form.NodeName.label(class="form-control-label") }}
+                {% if form.NodeName.errors %}
+                    {{ form.NodeName(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.NodeName.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.NodeName(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.ViewName.label(class="form-control-label") }}
+                {% if form.ViewName.errors %}
+                    {{ form.ViewName(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.ViewName.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.ViewName(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.CameraType.label(class="form-control-label") }}
+                {% if form.CameraType.errors %}
+                    {{ form.CameraType(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.CameraType.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.CameraType(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.Display.label(class="form-control-label") }}
+                {% if form.Display.errors %}
+                    {{ form.Display(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.Display.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.Display(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.Chk_Objects.label(class="form-control-label") }}
+                {% if form.Chk_Objects.errors %}
+                    {{ form.Chk_Objects(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.Chk_Objects.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.Chk_Objects(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.ALPR.label(class="form-control-label") }}
+                {% if form.ALPR.errors %}
+                    {{ form.ALPR(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.ALPR.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.ALPR(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.ROI_name.label(class="form-control-label") }}
+                {% if form.ROI_name.errors %}
+                    {{ form.ROI_name(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.ROI_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.ROI_name(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.Message.label(class="form-control-label") }}
+                {% if form.Message.errors %}
+                    {{ form.Message(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.Message.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.Message(class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.Twilio_Enabled.label(class="form-control-label") }}
+                {% if form.Twilio_Enabled.errors %}
+                    {{ form.Twilio_Enabled(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.Twilio_Enabled.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.Twilio_Enabled(class="form-control") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}
