@@ -1,0 +1,19 @@
+{
+	"OIP_HOST": "mosquitto",
+	"MQTT_USER": "admin",
+	"MQTT_PW": "admin",
+	"MQTT_PORT": 1883,
+	"latest_images": "latest_images.json",
+	"test_pattern": "RCA_Indian_Head_Test_Pattern_Dark.jpg",
+	"imagehub_data": "/home/your_user/IOTstack/volumes/nodered/data/imagehub_data",
+	"ALPR_regions": ["us-tx", "us-la", "us-ca", "us-ok"],
+	"ALPR_API_TOKEN": "your_ALPR_token",
+	"purge_folders": "purge_folders.json",
+	"SECRET_KEY": "5791628bb0b13ce0c676dfde280ba245",
+	"SQLALCHEMY_DATABASE_URI": "mariadb+mariadbconnector://mariadbuser:IOtSt4ckmariaDbPw@mariadb/imagehub",
+	"MAIL_SERVER": "smtp.someplace.net",
+	"MAIL_PORT": 465,
+	"MAIL_USE_TLS": true,
+	"MAIL_USERNAME": "your_email_address@someplace.com",
+	"MAIL_PASSWORD": "your_password"
+}
