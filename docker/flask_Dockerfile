@@ -13,7 +13,7 @@ WORKDIR /flaskblog
 
 # Install any needed packages specified in requirements.txt
 COPY requirements.txt /flaskblog
-RUN pip install -r requirements.txt
+RUN pip install -r flask_requirements.txt
 
 # Run run.py when the container launches
 CMD python run.py
