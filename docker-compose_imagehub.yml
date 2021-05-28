@@ -1,0 +1,173 @@
+version: '3.6'
+services:
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+    - "9080:8080"
+    networks:
+    - iotstack_nw
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    restart: unless-stopped
+    user: "0"
+    ports:
+    - "3000:3000"
+    environment:
+    - GF_PATHS_DATA=/var/lib/grafana
+    - GF_PATHS_LOGS=/var/log/grafana
+    volumes:
+    - ./volumes/grafana/data:/var/lib/grafana
+    - ./volumes/grafana/log:/var/log/grafana
+    networks:
+    - iotstack_nw
+
+  mosquitto:
+    container_name: mosquitto
+    build: ./.templates/mosquitto/.
+    restart: unless-stopped
+    environment:
+    - TZ="America/Chicago"
+    ports:
+    - "1883:1883"
+    volumes:
+    - ./volumes/mosquitto/config:/mosquitto/config
+    - ./volumes/mosquitto/data:/mosquitto/data
+    - ./volumes/mosquitto/log:/mosquitto/log
+    - ./volumes/mosquitto/pwfile:/mosquitto/pwfile
+    networks:
+    - iotstack_nw
+
+  nodered:
+    container_name: nodered
+    build: ./services/nodered/.
+    restart: unless-stopped
+    user: "0"
+    environment:
+    - TZ="America/Chicago"
+    ports:
+    - "1880:1880"
+    volumes:
+    - ./volumes/nodered/data:/data
+    - ./volumes/nodered/ssh:/root/.ssh
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+    networks:
+    - iotstack_nw
+
+  mariadb:
+    image: linuxserver/mariadb
+    container_name: mariadb
+    environment:
+    - TZ="America/Chicago"
+    - PUID=1000
+    - PGID=1000
+    - MYSQL_ROOT_PASSWORD=IOtSt4ckToorMariaDb
+    - MYSQL_DATABASE=default
+    - MYSQL_USER=mariadbuser
+    - MYSQL_PASSWORD=IOtSt4ckmariaDbPw
+    volumes:
+    - ./volumes/mariadb/config:/config
+    ports:
+    - "3306:3306"
+    restart: unless-stopped
+    networks:
+    - iotstack_nw
+
+  portainer-ce:
+    container_name: portainer-ce
+    image: portainer/portainer-ce
+    restart: unless-stopped
+    ports:
+    - "8000:8000"
+    - "9000:9000"
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./volumes/portainer-ce/data:/data
+
+  opencv:
+    container_name: opencv
+    image: opencv:latest
+    ports:
+      - 5555:5555
+      - 5556:5556
+      - 5557:5557
+    restart: unless-stopped
+    environment:
+      TZ: "America/Chicago"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /home/YOUR_HOME_DIRECTORY/IOTstack:/home/YOUR_HOME_DIRECTORY/IOTstack
+      - /home/YOUR_HOME_DIRECTORY/IOTstack/imagehub:/home/YOUR_HOME_DIRECTORY/IOTstack/imagehub
+      - /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data:/home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data
+    working_dir: "/home/YOUR_HOME_DIRECTORY/IOTstack/"
+    command: 
+      - bash
+      - /home/YOUR_HOME_DIRECTORY/IOTstack/openalpr_script.sh
+    networks:
+    - iotstack_nw
+
+  flask:
+    container_name: flask
+    image: flask:latest
+    restart: unless-stopped
+    environment:
+      - FLASK_DEBUG=1
+    links:
+      - mariadb
+    volumes:
+      - /home/YOUR_HOME_DIRECTORY/IOTstack:/home/YOUR_HOME_DIRECTORY/IOTstack
+      - /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data:/home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static/imagehub_data
+    working_dir: "/home/YOUR_HOME_DIRECTORY/IOTstack/"
+    ports:
+      - 5000:5000
+    command:
+      - python
+      - /home/YOUR_HOME_DIRECTORY/IOTstack/run.py
+    networks:
+    - iotstack_nw
+
+networks:
+  iotstack_nw: # Exposed by your host.
+    # external: true
+    name: IOTstack_Net
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.77.60.0/24
+        # - gateway: 10.77.60.1
+
+  iotstack_nw_internal: # For interservice communication. No access to outside
+    name: IOTstack_Net_Internal
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.77.76.0/24
+        # - gateway: 10.77.76.1
+
+  vpn_nw: # Network specifically for VPN
+    name: IOTstack_VPN
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.77.88.0/24
+        # - gateway: 192.18.200.1
+
+  nextcloud_internal: # Network for NextCloud service
+    name: IOTstack_NextCloud
+    driver: bridge
+    internal: true
+
+  # default:
+  #   external: true
+  #   name: iotstack_nw
+
+  # hosts_nw:
+  #   driver: hosts
