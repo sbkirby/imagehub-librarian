@@ -12,7 +12,6 @@ EXPOSE 5000
 WORKDIR /flaskblog
 
 # Install any needed packages specified in requirements.txt
-COPY flask_requirements.txt /flaskblog
 RUN pip install -r flask_requirements.txt
 
 # Run run.py when the container launches
