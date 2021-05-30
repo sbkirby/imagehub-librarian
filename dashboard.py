@@ -29,10 +29,16 @@ ap.add_argument("-iW", "--imageW", required=False, type=int, help="image width",
 ap.add_argument("-iH", "--imageH", required=False, type=int, help="image height", default=315)
 args = vars(ap.parse_args())
 
+# define Working Directory
+work_dir = os.path.join(os.path.dirname( __file__ ), os.pardir)
+
+with open(os.path.join(work_dir, 'config.json')) as json_data_file:
+    data = json.load(json_data_file)
+
 # JSON data file location and name
-latest_images = '/home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data/latest_images.json'
+latest_images = os.path.join(data["imagehub_data"], 'latest_images.json')
 # Test Pattern image displayed if an error occurs while reading a file entry
-test_pattern = '/home/YOUR_HOME_DIRECTORY/IOTstack/images/RCA_Indian_Head_Test_Pattern_Dark.jpg'
+test_pattern = os.path.join(work_dir, 'images', data["test_pattern"])
 
 # display width & height of each video feed
 display_width = args["imageW"]
