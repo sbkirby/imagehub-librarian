@@ -3,14 +3,14 @@
 mqtt_client.py - detect objects in images and preform ALPR on car images via Plate Recognizer account at
 https://platerecognizer.com/
 
-Edit JSON config.json file in home_dir defined below
+Edit JSON config.json file in work_dir defined below
 
 Date: October 1, 2020
 By: Stephen B. Kirby
 """
 
 import sys
-import os.path
+import os
 import time
 import paho.mqtt.client as mqtt
 import json
@@ -26,7 +26,7 @@ DEBUG = True
 # init client object
 client = None
 # define Home Directory
-home_dir = '/home/YOUR_ACCOUNT_FOLDER/IOTstack/'
+work_dir = os.path.join(os.path.dirname( __file__ ), os.pardir)
 # ALPR regions for Plate Recognizer
 regions = ['us-tx']
 API_TOKEN = '****INSERT YOUR API TOKEN****'
@@ -34,7 +34,7 @@ API_TOKEN = '****INSERT YOUR API TOKEN****'
 
 # read data from config file. json only
 def load_config():
-    with open(home_dir + 'config.json') as json_data_file:
+    with open(os.path.join(work_dir, 'config.json')) as json_data_file:
         return json.load(json_data_file)
 
 
