@@ -15,7 +15,7 @@ manage the hardware and images.
 Here is a pair of images shown with their corresponding log entries. These were
 captured by a Raspberry Pi PiCamera and an infrared floodlight:
 
-.. image:: imagehub-docs/images/Flask_View.jpg
+.. image:: librarian-docs/images/Flask_View.jpg
 
 The log shows the coyote motion events (in **bold**) as "Barn". It also shows
 events from 2 other Raspberry Pi computers that were sending at the same time,
