@@ -25,8 +25,8 @@ current_status = True
 DEBUG = True
 # init client object
 client = None
-# define Home Directory
-work_dir = os.path.join(os.path.dirname( __file__ ), os.pardir)
+# define Working Directory
+work_dir = os.path.dirname( __file__ )
 # ALPR regions for Plate Recognizer
 regions = ['us-tx']
 API_TOKEN = '****INSERT YOUR API TOKEN****'
