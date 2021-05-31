@@ -30,7 +30,7 @@ ap.add_argument("-iH", "--imageH", required=False, type=int, help="image height"
 args = vars(ap.parse_args())
 
 # define Working Directory
-work_dir = os.path.join(os.path.dirname( __file__ ), os.pardir)
+work_dir = os.path.dirname( __file__ )
 
 with open(os.path.join(work_dir, 'config.json')) as json_data_file:
     data = json.load(json_data_file)
