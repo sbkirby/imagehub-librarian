@@ -1,0 +1,132 @@
+Install IOTstack found at:
+https://sensorsiot.github.io/IOTstack/Getting-Started/
+
+follow the directions for new installation
+automatic (recommended):
+
+$ sudo apt install -y curl git net-tools openssh-server htop apt-utils
+$  
+$ curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash
+$
+$ cd ~/IOTstack
+$ ./menu.sh
+The first time will install PIP and Docker
+
+$ cd ~/IOTstack
+$ ./menu.sh
+Select "Build Stack"
+This will install the containers you select
+
+portainer-ce
+nodered
+mosquitto
+mariadb
+adminer
+
+# Shutdown Docker (if started)
+$ cd ~/IOTstack
+$ docker-compose down
+
+Install imagehub:
+# Note: Do not follow the imagehub installation instructions.  Imagehub will run from
+# a docker container. Therefore, the imagehub.service doesn't need to be configured and 
+# installed to run.
+$ 
+$ cd ~/IOTstack
+$ git clone https://github.com/jeffbass/imagehub.git
+# change the imagehub data_directory to your Docker data location
+$ nano imagehub/imagehub.yaml
+	data_directory: /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data
+# Do not configure or start the imagehub service.
+
+Install imagehub-librarian into the IOTstack folder:
+$ cd ~
+$ git clone https://github.com/sbkirby/imagehub-librarian.git ~/IOTstack
+$ cd ~/IOTstack
+
+# edit openalpr_script.sh and change 
+# 'YOUR_HOME_DIRECTORY' to the appropriate folder name
+$ nano openalpr_script.sh
+# make the file executable
+$ chmod +x openalpr_script.sh
+
+$ cd ~/IOTstack/docker
+# build the Docker images for Flask and opencv
+$ docker build -f flask_Dockerfile -t flask:latest .
+$ docker build -f opencv_Dockerfile -t opencv:latest .
+
+$ cd ~/IOTstack
+# rename the docker-compose.yml file built by IOTstack and replace it
+# with the file furnished by imagehub-librarian
+$ mv docker-compose.yml docker-compose_original.yml
+$ mv docker-compose_imagehub.yml docker-compose.yml
+# edit the folder location for Flask and opencv in the NEW docker-compose.yml file
+$ nano docker-compose.yml
+# replace all YOUR_HOME_DIRECTORY with your username
+Press Ctrl + \
+YOUR_HOME_DIRECTORY
+
+# Start Docker
+$ cd ~/IOTstack
+$ docker-compose up -d
+# view all containers
+$ docker ps -a
+
+MariaDB: http://localhost:9080
+log into Adminer 
+server: mariadb
+user: root 
+password: IOtSt4ckToorMariaDb
+
+# Import database
+Import » "Choose Files" imagehub_mariadb_database.sql and "Execute"
+
+# setup privileges for user mariadbuser
+MySQL » mariadb » imagehub » Privileges » Create user
+	User: mariadbuser
+	Password: IOtSt4ckmariaDbPw
+	check All privileges  `imagehub`.*
+
+
+Node-Red: http://localhost:1880
+log into nodered
+
+Menu->Manage palette->Install Tab->search modules
+install node-red-contrib-stackhero-mysql
+install node-red-node-email
+
+Menu->select a file to import
+select file: ~/IOTstack/node-red/Image_Hub_Dashboard_flows.json 
+
+connect data modules 'imagehub DB' nodes to MariaDB 'imagehub' Database 
+	Host: mariadb
+	Port: 3306
+	User: mariadbuser
+	Password: IOtSt4ckmariaDbPw
+	Database: imagehub
+	Name: imagehub
+
+Grafana: http://localhost:3000
+username: admin    
+password: admin
+change password if you wish or Skip
+
+Configuration -> Data Source
+Data Service MySQL
+name: MySQL
+Host: mariadb
+Database: imagehub
+User: mariadbuser	Password: IOtSt4ckmariaDbPw
+save & test
+
+Dashboards -> Manage
+upload json file ->  ALPR Events
+Name: ALPR Events
+Folder: General
+MySQL: MySQL
+
+Flask: http://localhost:5000
+# create link to image folder
+$ cd /home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static
+$ ln -s /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data imagehub_data
+
