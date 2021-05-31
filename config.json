@@ -5,7 +5,7 @@
 	"MQTT_PORT": 1883,
 	"latest_images": "latest_images.json",
 	"test_pattern": "RCA_Indian_Head_Test_Pattern_Dark.jpg",
-	"imagehub_data": "/home/your_user/IOTstack/volumes/nodered/data/imagehub_data",
+	"imagehub_data": "/home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data",
 	"ALPR_regions": ["us-tx", "us-la", "us-ca", "us-ok"],
 	"ALPR_API_TOKEN": "your_ALPR_token",
 	"purge_folders": "purge_folders.json",
