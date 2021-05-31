@@ -4,5 +4,5 @@ hub:
   queuemax: 500 # maximum size of queue of images to write
   patience: 60  # how often to log a lack of message in minutes
   print_settings: False
-  data_directory: /home/YOUR_USERNAME/IOTstack/volumes/nodered/data/imagehub_data
+  data_directory: /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data
   max_images_write: 5000  # a cap on images to write in one day
