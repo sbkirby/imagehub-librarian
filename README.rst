@@ -12,10 +12,10 @@ from Raspberry Pi&rsquo;s (RPi&rsquo;s). Containers of Grafana and
 Flask are integrated into application to monitor statistics, and
 manage the hardware and images.
 
-Here is a pair of images shown with their corresponding log entries. These were
-captured by a Raspberry Pi PiCamera and an infrared floodlight:
+Here are a couple of images of the **imagehub-librarian** dashboards for viewing and managing the cameras and images captured by **imagehub**:
 
 .. image:: librarian-docs/images/Flask_View.jpg
+.. image:: librarian-docs/images/image_of_dashboard.png
 
 The log shows the coyote motion events (in **bold**) as "Barn". It also shows
 events from 2 other Raspberry Pi computers that were sending at the same time,
