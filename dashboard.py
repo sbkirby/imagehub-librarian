@@ -36,7 +36,7 @@ with open(os.path.join(work_dir, 'config.json')) as json_data_file:
     data = json.load(json_data_file)
 
 # JSON data file location and name
-latest_images = os.path.join(data["imagehub_data"], 'latest_images.json')
+latest_images = os.path.join(data["imagehub_data"], data["latest_images"])
 # Test Pattern image displayed if an error occurs while reading a file entry
 test_pattern = os.path.join(work_dir, 'images', data["test_pattern"])
 
