@@ -27,9 +27,6 @@ DEBUG = True
 client = None
 # define Working Directory
 work_dir = os.path.dirname( __file__ )
-# ALPR regions for Plate Recognizer
-regions = ['us-tx']
-API_TOKEN = '****INSERT YOUR API TOKEN****'
 
 
 # read data from config file. json only
@@ -136,12 +133,15 @@ def clean_and_exit():
 
 
 def main():
-    global client
+    global client, API_TOKEN, regions
     # wait 15 seconds for network to start
     if DEBUG:
         print("[INFO] Standby 10 seconds for things to start.")
     time.sleep(10)
     data = load_config()
+    # ALPR regions for Plate Recognizer
+    regions = data['ALPR_regions']
+    API_TOKEN = data['ALPR_API_TOKEN']
     # mqtt connect
     client = mqtt.Client(client_name)
     client.on_connect = on_connect
