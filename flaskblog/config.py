@@ -11,7 +11,7 @@ import json
 # read data from config file. json only
 def load_config():
 	# define Working Directory
-	wrk_dir = os.path.join(os.path.dirname( __file__ ), os.pardir)
+	wrk_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
 	with open(os.path.join(wrk_dir, 'config.json')) as json_data_file:
 		return json.load(json_data_file)
 
