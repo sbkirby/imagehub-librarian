@@ -163,7 +163,7 @@ All of the containers currently running can be seen via::
 
     docker ps -a
 
-Configure each of the docker containers with files furnished by **imagehub-librarian**.
+Next, configure each of the docker containers with files furnished by **imagehub-librarian**.
 
 MariaDB:
 Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhost:9080>`_ ::
@@ -185,6 +185,62 @@ MySQL » mariadb » imagehub » Privileges » Create user::
 	check 'All privileges'  `imagehub`.*
 
 .. image:: librarian-docs/images/mariadb_privileges_create_user.jpg
+
+Node-Red:
+Log into Node-Red `http://localhost:1880 <http://localhost:1880>`_.  Go to the Menu->Manage palette->Install Tab->search modules, and install
+modules 'node-red-contrib-stackhero-mysql' and 'node-red-node-email'.
+
+.. image:: librarian-docs/images/nodered_manage_palette.jpg
+
+Go to the Menu->Import->'select a file' to import the **imagehub-librarian** flow.
+select file: ~/IOTstack/node-red/Image_Hub_Dashboard_flows.json
+
+.. image:: librarian-docs/images/nodered_import_flow.jpg
+
+Connect the data modules 'imagehub DB' nodes to MariaDB 'imagehub' Database::
+
+    Host: mariadb
+    Port: 3306
+    User: mariadbuser
+    Password: IOtSt4ckmariaDbPw
+    Database: imagehub
+    Name: imagehub
+
+.. image:: librarian-docs/images/nodered_imagehub_DB_edit.jpg
+.. image:: librarian-docs/images/nodered_imagehub_DB_Database_config.jpg
+
+Grafana:
+Log into Grafana `http://localhost:3000 <http://localhost:3000>`_ ::
+
+    username: admin
+    password: admin
+    change password if you wish or Skip
+
+First, configure the database used by Grafana by going to menu Configuration -> Data Source::
+
+    Data Service MySQL
+    name: MySQL
+    Host: mariadb
+    Database: imagehub
+    User: mariadbuser	Password: IOtSt4ckmariaDbPw
+    save & test
+
+Next, install a JSON configuration file with charts and tables for the imagehub database.
+Go to menu Dashboards -> Manage::
+
+    upload json file ->  ALPR Events
+    Name: ALPR Events
+    Folder: General
+    MySQL: MySQL
+
+Flask:
+Before images are accesable from Flask, a link to the image folder must be created.  Change 'YOUR_HOME_DIRECTORY' to the
+appropriate folder name::
+
+    cd /home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static
+    ln -s /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data imagehub_data
+
+Log into Flask and create a user for yourself at ` http://localhost:5000 <http://localhost:5000>`_.
 
 
 Running the Tests
