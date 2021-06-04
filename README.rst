@@ -225,22 +225,26 @@ First, configure the database used by Grafana by going to menu Configuration -> 
     User: mariadbuser	Password: IOtSt4ckmariaDbPw
     save & test
 
-Next, install a JSON configuration file with charts and tables for the imagehub database.
+.. image:: librarian-docs/images/grafana_database_config.jpg
+
+Next, install a JSON configuration file, ALPR_Events-grafana.json located in the 'misc' folder, with charts and tables for the 'imagehub' database.
 Go to menu Dashboards -> Manage::
 
-    upload json file ->  ALPR Events
+    upload json file -> ALPR_Events-grafana.json
     Name: ALPR Events
     Folder: General
     MySQL: MySQL
 
+.. image:: librarian-docs/images/grafana_import_dashboard.jpg
+
 Flask:
-Before images are accesable from Flask, a link to the image folder must be created.  Change 'YOUR_HOME_DIRECTORY' to the
+Before images are accessible from Flask, a link to the image folder must be created.  Change 'YOUR_HOME_DIRECTORY' to the
 appropriate folder name::
 
     cd /home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static
     ln -s /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data imagehub_data
 
-Log into Flask and create a user for yourself at ` http://localhost:5000 <http://localhost:5000>`_.
+Log into Flask and create a user for yourself at `http://localhost:5000 <http://localhost:5000>`_.
 
 
 Running the Tests
