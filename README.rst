@@ -152,7 +152,7 @@ Edit the 'YOUR_HOME_DIRECTORY' folder locations for Flask and opencv in the NEW 
 
     nano docker-compose.yml
 
-Tip: Pressing 'Ctrl + \' in nano will allow for multiple finds and replaces.
+Tip: Pressing 'Ctrl + \\' in nano will allow for multiple finds and replaces.
 
 Docker can be started::
 
@@ -174,6 +174,7 @@ Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhos
 
 Import database located in the 'misc' folder:
 Import » "Choose Files" imagehub_mariadb_database.sql and "Execute"
+
 .. image:: librarian-docs/images/mariadb_import_database.jpg
 
 Setup privileges for user 'mariadbuser'
