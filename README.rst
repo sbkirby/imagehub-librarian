@@ -1,94 +1,190 @@
 ===================================================
-imagehub-librarian: A Image Hub Librarian for Receiving and Saving Images from Raspberry Pis
+imagehub-librarian: An Application for Receiving, Saving and Managing Images from Raspberry Pi's
 ===================================================
 
 Introduction
 ============
 
-**imagehub-librarian** The Imagehub Librarian is a Docker based application using
+The **imagehub-librarian** is a Docker based application using
 Node-Red, MQTT, MariaDB and OpenCV containers along with the `imagehub <https://github.com/jeffbass/imagehub>`_
 package from Jeff Bass to receive, save and manage images received
-from Raspberry Pi&rsquo;s (RPi&rsquo;s). Containers of Grafana and
-Flask are integrated into application to monitor statistics, and
+from Raspberry Pi's (RPi's). Containers of Grafana and
+Flask are integrated into this application to monitor statistics, and
 manage the hardware and images.
 
-Here are a couple of images of the **imagehub-librarian** dashboards for viewing and managing the cameras and images captured by **imagehub**:
+Here are a couple of images of the **imagehub-librarian** dashboards for viewing and managing the cameras and images
+captured by **imagehub**:
 
 .. image:: librarian-docs/images/Flask_View.jpg
 .. image:: librarian-docs/images/image_of_dashboard.png
 
-The log shows the coyote motion events (in **bold**) as "Barn". It also shows
-events from 2 other Raspberry Pi computers that were sending at the same time,
-"WaterMeter" and "BackDeck". Motion events create camera images like the
-2 shown above. Temperature events are gathered by sensors attached to the
-Raspberry Pi computers' GPIO pins.
+Additionally, this application is capable of detecting the objects of captured images.  If a 'car' is detected, this
+application is capable of performing Automatic License Plate Recognition (ALPR) on the captured image.  All of the
+object dection and ALPR data is stored in a relational database, and can be monitored in Grafana and the Flask
+sections of **imagehub-librarian**.
 
 .. contents::
 
 Overview
 ========
 
-**imagehub-librarian** is the "receive and store" part of a distributed computer vision
-pipeline that is run on multiple computers. Multiple Raspberry Pi
-(and other) computers run **imagenode** to capture images, detect motion, light,
-temperature values, etc. **Imagenode** then sends event messages and selected
-images to **imagehub-librarian**, which files the events and images for later
-analysis.  My typical setup has 8 to 12 sending computers for each **imagehub-librarian**.
+Jeff Bass's **imagehub** application is the backbone of this application.  It is the "receive and store" part of a
+distributed computer vision pipeline that is run on multiple computers. Multiple Raspberry Pi (and other) computers
+run **imagenode** to capture images, detect motion, light, temperature values, etc. **Imagenode** then sends event
+messages and selected images to **imagehub**, which files the events and images for later analysis.  Typically,
+**imagehub** can manage up to 8 to 12 sending computers.
 
-By design, **imagehub-librarian** is a very simple program. It does 2 things:
+By design, **imagehub** is a very simple program. It does 2 things:
 
 1. It receives images and stores them.
 2. It receives event messages and logs them.
 
-It does this from multiple sources simultaneously. The sources are typically a
-bunch of Raspberry Pi computers with PiCameras and temperature sensors. Keeping
-**imagehub-librarian** simple allows it to be fast enough to reliably store data from
-multiple sources. Analysis of images and responses to queries
-are handled by other programs. See `Using imagenode in distributed computer vision projects <https://github.com/jeffbass/imagenode/blob/master/docs/imagenode-uses.rst>`_
-for a more detailed explanation of the overall project design. See the
-`Yin Yang Ranch project <https://github.com/jeffbass/yin-yang-ranch>`_
-for more details about the architecture of the
-**imagenode** <--> **imageZMQ** <--> **imagehub-librarian** system.
+It does this from multiple sources simultaneously. The sources are typically a bunch of Raspberry Pi computers with
+PiCameras and temperature sensors. Keeping **imagehub** simple allows it to be fast enough to reliably store data from
+multiple sources. Analysis of images and responses to queries are handled by other programs. See `Using imagenode in
+distributed computer vision projects <https://github.com/jeffbass/imagenode/blob/master/docs/imagenode-uses.rst>`_
+for a more detailed explanation of the overall project design.
 
+The **imagehub-librarian** provides a means of viewing and monitoring the log files and images saved
+by **imagehub**.  Plus, it adds a means of object detection and ALPR for selected cameras.
 
-imagehub Features
-=================
+imagehub-librarian Features
+===========================
 
-- Receives and save images from multiple Raspberry Pi's simultaneously.
-- Receives and logs event messages from multiple RPi's simultaneously.
-- Uses threading for image writing to enhance responsiveness.
-- Threading can be replaced with multiprocessing with minimal code changes.
+- Records the images and sensor events saved by **imagehub** in a database.
+- Inspects the images for objects and records the results.
+- Triggered events based on detected objects. For example, if a 'car' or 'truck' is detected, the image might be analyzed for a License Plate via ALPR.
 
 Dependencies and Installation
 =============================
 
 **imagehub-librarian** has been tested with:
 
-- Python 3.5, 3.6 and 3.7
-- OpenCV 3.3 and 4.0+
-- PyZMQ 16.0+
-- imageZMQ 1.0.1+
+- ubuntu 20.04 LTS running on a BMAX Mini PC with Intel Celeron J4125, 8GB DDR4 and 500GB NVMe Internal SSD
+- `imagehub <https://github.com/jeffbass/imagehub>`_ Version 0.2.0 - 2021-01-17
+- `IOTstack <https://github.com/SensorsIot/IOTstack>`_ - on 2021-06-04
 
-**imagehub-librarian** uses **imageZMQ** to receive event messages and images that are
-captured and sent by **imagenode**. You will need to install and test both
-**imageZMQ** and **imagenode** before using **imagehub-librarian**.
-The instructions for installing and testing **imageZMQ** are in the
-`imageZMQ GitHub repository <https://github.com/jeffbass/imagezmq.git>`_.
-The instructions for installing and testing **imagenode** are in the
-`imagenode GitHub repository <https://github.com/jeffbass/imagenode.git>`_.
+The **IOTstack** package provides the docker framework for the **imagehub-librarian**.  The librarian
+builds two additional docker images, and provides the configuration files and instructions for
+the **IOTstack** installed docker images.  To install **IOTstack**::
 
-**imagehub-librarian** is still in early development, so it is not yet in PyPI. Get it by
-cloning the GitHub repository::
+    sudo apt install -y curl git net-tools openssh-server htop apt-utils
+    curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash
 
+After executing the above lines. Change directory to IOTstack and execute the menu.sh shell file::
+
+    cd ~/IOTstack
+    ./menu.sh
+
+This will install PIP and docker, and require a reboot.  Log in again and change directory to IOTstack
+and execute the menu.sh again and select "Build Stack"::
+
+    cd ~/IOTstack
+    ./menu.sh
+    Select "Build Stack"
+
+Select the following images to build the stack::
+
+    adminer
+    mariadb
+    mosquitto
+    nodered
+    portainer-ce
+
+After the stack has been built, and the menu has been exited DO NOT START Docker.  There are a few task
+to complete before Docker is started.  To insure your Docker has not started::
+
+    cd ~/IOTstack
+    docker-compose down
+
+Install **imagehub** in the IOTstack folder. Note: Do not follow the **imagehub** installation instructions.  Imagehub will run from
+a docker container. Therefore, the imagehub.service doesn't need to be configured and installed to run::
+
+    cd ~/IOTstack
     git clone https://github.com/jeffbass/imagehub.git
 
-Once you have cloned **imagehub-librarian** to a directory on your local machine,
-you can run the tests using the instructions below. The instructions assume you
-have cloned both **imagehub-librarian** to the user home directory. It
-is also important that you have successfully run all the tests for **imageZMQ**
-and for **imagenode**. The recommended testing arrangement is to run **imagehub-librarian**
-on the same Mac (or other display computer) that you used to run the
-``imagezmq/tests/timing_receive_jpg_buf.py`` program when you tested **imagenode**.
+Change the **imagehub** data_directory in the imagehub.yaml file to your Docker data location::
+
+    nano imagehub/imagehub.yaml
+
+Edit the data_directory field to match your installation. Change 'YOUR_HOME_DIRECTORY' to your username or folder name::
+
+    data_directory: /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data
+
+At the time of this installation, Node-Red didn't allow for volumes outside of nodered/data path.  Hence,
+the unusual imagehub_data location seen above.
+
+Install the **imagehub-librarian** package.  The following will install these files into the IOTstack folder::
+
+    cd ~
+    git clone https://github.com/sbkirby/imagehub-librarian.git ~/IOTstack
+    cd ~/IOTstack
+
+Several task are required prior to starting Docker.  Edit the openalpr_script.sh and change
+'YOUR_HOME_DIRECTORY' to the appropriate folder name::
+
+    nano openalpr_script.sh
+
+Make openalpr_script.sh executable::
+
+    chmod +x openalpr_script.sh
+
+Edit the 'config.json' file, and replace 'YOUR_HOME_DIRECTORY' to the appropriate folder name.  Configure
+the email entries to match your email information ('MAIL_SERVER', 'MAIL_PORT', 'MAIL_USE_TLS', 'MAIL_USERNAME', 'MAIL_PASSWORD').
+If a 'ALPR_API_TOKEN' is available from `Plate Recognizer <https://www.platerecognizer.com/>`_, enter it in the field::
+
+    nano config.json
+
+Build the OpenCV and Flask images::
+
+    cd ~/IOTstack/docker
+    docker build -f flask_Dockerfile -t flask:latest .
+    docker build -f opencv_Dockerfile -t opencv:latest .
+
+Rename the 'docker-compose.yml' file built by **IOTstack** and replace it with the file furnished by
+**imagehub-librarian**::
+
+    cd ~/IOTstack
+    mv docker-compose.yml docker-compose_original.yml
+    mv docker-compose_imagehub.yml docker-compose.yml
+
+Edit the 'YOUR_HOME_DIRECTORY' folder locations for Flask and opencv in the NEW 'docker-compose.yml' file::
+
+    nano docker-compose.yml
+
+Tip: Pressing 'Ctrl + \' in nano will allow for multiple finds and replaces.
+
+Docker can be started::
+
+    cd ~/IOTstack
+    docker-compose up -d
+
+All of the containers currently running can be seen via::
+
+    docker ps -a
+
+Configure each of the docker containers with files furnished by **imagehub-librarian**.
+
+MariaDB:
+Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhost:9080>`_ ::
+
+    server: mariadb
+    user: root
+    password: IOtSt4ckToorMariaDb
+
+Import database located in the 'misc' folder:
+Import » "Choose Files" imagehub_mariadb_database.sql and "Execute"
+.. image:: librarian-docs/images/mariadb_import_database.jpg
+
+Setup privileges for user 'mariadbuser'
+MySQL » mariadb » imagehub » Privileges » Create user::
+
+	User: mariadbuser
+	Password: IOtSt4ckmariaDbPw
+	check 'All privileges'  `imagehub`.*
+
+.. image:: librarian-docs/images/mariadb_privileges_create_user.jpg
+
 
 Running the Tests
 =================
