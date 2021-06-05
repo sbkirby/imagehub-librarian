@@ -16,11 +16,11 @@ Here are a couple of images of the **imagehub-librarian** dashboards for viewing
 captured by **imagehub**:
 
 .. image:: librarian-docs/images/Flask_View.jpg
-    :width: 600px
+    :width: 200px
     :align: center
     :alt: Example of Flask webpage
 .. image:: librarian-docs/images/image_of_dashboard.png
-    :width: 600px
+    :width: 200px
     :align: center
     :alt: Example of Dashboard View
 
