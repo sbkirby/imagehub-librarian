@@ -1,6 +1,6 @@
-===================================================
+================================================================================================
 imagehub-librarian: An Application for Receiving, Saving and Managing Images from Raspberry Pi's
-===================================================
+================================================================================================
 
 Introduction
 ============
@@ -16,7 +16,13 @@ Here are a couple of images of the **imagehub-librarian** dashboards for viewing
 captured by **imagehub**:
 
 .. image:: librarian-docs/images/Flask_View.jpg
+    :width: 600px
+    :align: center
+    :alt: Example of Flask webpage
 .. image:: librarian-docs/images/image_of_dashboard.png
+    :width: 600px
+    :align: center
+    :alt: Example of Dashboard View
 
 Additionally, this application is capable of detecting the objects of captured images.  If a 'car' is detected, this
 application is capable of performing Automatic License Plate Recognition (ALPR) on the captured image.  All of the
@@ -163,9 +169,12 @@ All of the containers currently running can be seen via::
 
     docker ps -a
 
+Configure Docker Images
+-----------------------
 Next, configure each of the docker containers with files furnished by **imagehub-librarian**.
 
-MariaDB:
+MariaDB
+^^^^^^^
 Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhost:9080>`_ ::
 
     server: mariadb
@@ -186,7 +195,8 @@ MySQL » mariadb » imagehub » Privileges » Create user::
 
 .. image:: librarian-docs/images/mariadb_privileges_create_user.jpg
 
-Node-Red:
+Node-Red
+^^^^^^^^
 Log into Node-Red `http://localhost:1880 <http://localhost:1880>`_.  Go to the Menu->Manage palette->Install Tab->search modules, and install
 modules 'node-red-contrib-stackhero-mysql' and 'node-red-node-email'.
 
@@ -209,7 +219,8 @@ Connect the data modules 'imagehub DB' nodes to MariaDB 'imagehub' Database::
 .. image:: librarian-docs/images/nodered_imagehub_DB_edit.jpg
 .. image:: librarian-docs/images/nodered_imagehub_DB_Database_config.jpg
 
-Grafana:
+Grafana
+^^^^^^^
 Log into Grafana `http://localhost:3000 <http://localhost:3000>`_ ::
 
     username: admin
@@ -230,14 +241,15 @@ First, configure the database used by Grafana by going to menu Configuration -> 
 Next, install a JSON configuration file, ALPR_Events-grafana.json located in the 'misc' folder, with charts and tables for the 'imagehub' database.
 Go to menu Dashboards -> Manage::
 
-    upload json file -> ALPR_Events-grafana.json
+    Import -> ALPR_Events-grafana.json
     Name: ALPR Events
     Folder: General
     MySQL: MySQL
 
 .. image:: librarian-docs/images/grafana_import_dashboard.jpg
 
-Flask:
+Flask
+^^^^^
 Before images are accessible from Flask, a link to the image folder must be created.  Change 'YOUR_HOME_DIRECTORY' to the
 appropriate folder name::
 
