@@ -185,7 +185,7 @@ Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhos
     user: root
     password: IOtSt4ckToorMariaDb
 
-Import database located in the ``misc`` folder:
+Import database located in the ``~/IOTstack/misc`` folder:
 ``Import » "Choose Files" imagehub_mariadb_database.sql and "Execute"``
 
 .. image:: librarian-docs/images/mariadb_import_database.jpg
@@ -208,24 +208,27 @@ modules ``node-red-contrib-stackhero-mysql`` and ``node-red-node-email``.
 
 .. image:: librarian-docs/images/nodered_manage_palette.jpg
 
+Import Flows
+^^^^^^^^^^^^
 Go to the ``Menu->Import->'select a file'`` to import the **imagehub-librarian** flow.
 select file: ``~/IOTstack/misc/Image_Librarian_Dashboard_flows.json``
 
 .. image:: librarian-docs/images/nodered_import_flow.jpg
 
-Import Flows
-^^^^^^^^^^^^
 The ``Image_Librarian_Dashboard_flows.json`` file import the *Image Librarian*, *ID Objects SUB* and
 *ALPR SUB* flows.  The *Image Librarian* flow is the primary flow that triggers events in the *ID Objects SUB* and
 *ALPR SUB* via MQTT messages passed between the other flows and the ``MQTT_client.py`` module.
 
+**Image Librarian**
 .. image:: librarian-docs/images/nodered_image_librarian_flow.jpg
+**ID Objects SUB**
 .. image:: librarian-docs/images/nodered_id_objects_sub_flow.jpg
+**ALPR SUB**
 .. image:: librarian-docs/images/nodered_alpr_sub_flow.jpg
 
 Configure Directories
 ^^^^^^^^^^^^^^^^^^^^^
-The **Configuration Directories** node of the **Image Librarian** flow requires modification.  Double click the node, and
+The **Configuration Directories** node of the **Image Librarian** flow requires modification.  Double click the module, and
 edit each of the fields containing directories with ``YOUR_HOME_DIRECTORY``.
 
 .. image:: librarian-docs/images/nodered_configuration_directories.jpg
@@ -246,9 +249,11 @@ Connect the data modules *imagehub DB* nodes to MariaDB *imagehub* Database::
 
 Configure email Google Voice
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If you wish to receive Text messages from Node-Red for specific events, you will need to setup a *Google Voice* account
-and then edit the **email Google Voice** node as shown below.  This node could just as easily be configured to only send emails to
-a standard email account.
+If you wish to receive Text messages from Node-Red for specific events, you will need to setup a
+`Google Voice <https://support.google.com/voice/answer/115061>`_ account
+and then edit the **email Google Voice** node as shown below.  This node could just as easily be
+configured to only send emails to a standard email account.  Edit ``email node`` fields to match your email
+account.
 
 .. image:: librarian-docs/images/nodered_email_google_voice_node.jpg
 
@@ -276,7 +281,7 @@ First, configure the database used by Grafana by going to menu ``Configuration -
 
 Import JSON Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-Next, install a JSON configuration file, ``ALPR_Events-grafana.json`` located in the ``misc`` folder, with charts and tables for the *imagehub* database.
+Next, install a JSON configuration file, ``ALPR_Events-grafana.json`` located in the ``~/IOTstack/misc`` folder, with charts and tables for the *imagehub* database.
 Go to menu ``Dashboards -> Manage``::
 
     Import -> ALPR_Events-grafana.json
