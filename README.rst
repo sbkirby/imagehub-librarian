@@ -207,6 +207,7 @@ Log into Node-Red `http://localhost:1880 <http://localhost:1880>`_.  Go to the `
 modules ``node-red-contrib-stackhero-mysql`` and ``node-red-node-email``.
 
 .. image:: librarian-docs/images/nodered_manage_palette.jpg
+    :alt: Manage Palette
 
 Import Flows
 ^^^^^^^^^^^^
@@ -214,17 +215,18 @@ Go to the ``Menu->Import->'select a file'`` to import the **imagehub-librarian**
 select file: ``~/IOTstack/misc/Image_Librarian_Dashboard_flows.json``
 
 .. image:: librarian-docs/images/nodered_import_flow.jpg
+    :alt: Import Flow - select JSON file
 
 The ``Image_Librarian_Dashboard_flows.json`` file import the *Image Librarian*, *ID Objects SUB* and
 *ALPR SUB* flows.  The *Image Librarian* flow is the primary flow that triggers events in the *ID Objects SUB* and
 *ALPR SUB* via MQTT messages passed between the other flows and the ``MQTT_client.py`` module.
 
-**Image Librarian**
 .. image:: librarian-docs/images/nodered_image_librarian_flow.jpg
-**ID Objects SUB**
+    :alt: Image Librarian Flow
 .. image:: librarian-docs/images/nodered_id_objects_sub_flow.jpg
-**ALPR SUB**
+    :alt: ID Objects SUB Flow
 .. image:: librarian-docs/images/nodered_alpr_sub_flow.jpg
+    :alt: ALPR SUB Flow
 
 Configure Directories
 ^^^^^^^^^^^^^^^^^^^^^
