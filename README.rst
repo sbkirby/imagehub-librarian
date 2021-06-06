@@ -28,7 +28,7 @@ captured by **imagehub**:
 
 Additionally, this application is capable of detecting the objects of captured images.  If a 'car' is detected, this
 application is capable of performing Automatic License Plate Recognition (ALPR) on the captured image.  All of the
-object dection and ALPR data is stored in a relational database, and can be monitored in Grafana and the Flask
+object detection and ALPR data is stored in a relational database, and can be monitored in Grafana and the Flask
 sections of **imagehub-librarian**.
 
 .. contents::
@@ -70,7 +70,7 @@ Dependencies and Installation
 
 - ubuntu 20.04 LTS running on a BMAX Mini PC with Intel Celeron J4125, 8GB DDR4 and 500GB NVMe Internal SSD
 - `imagehub <https://github.com/jeffbass/imagehub>`_ Version 0.2.0 - 2021-01-17
-- `IOTstack <https://github.com/SensorsIot/IOTstack>`_ - on 2021-06-04
+- `IOTstack <https://github.com/SensorsIot/IOTstack>`_ - 2021-06-04
 
 The **IOTstack** package provides the docker framework for the **imagehub-librarian**.  The librarian
 builds two additional docker images, and provides the configuration files and instructions for
@@ -79,13 +79,13 @@ the **IOTstack** installed docker images.  To install **IOTstack**::
     sudo apt install -y curl git net-tools openssh-server htop apt-utils
     curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash
 
-After executing the above lines. Change directory to IOTstack and execute the menu.sh shell file::
+After executing the above lines. Change directory to IOTstack and execute the ``menu.sh`` shell file::
 
     cd ~/IOTstack
     ./menu.sh
 
 This will install PIP and docker, and require a reboot.  Log in again and change directory to IOTstack
-and execute the menu.sh again and select "Build Stack"::
+and execute the ``menu.sh`` again and select "Build Stack"::
 
     cd ~/IOTstack
     ./menu.sh
@@ -99,7 +99,7 @@ Select the following images to build the stack::
     nodered
     portainer-ce
 
-After the stack has been built, and the menu has been exited DO NOT START Docker.  There are a few task
+After the stack has been built, and the menu has been exited **DO NOT START** Docker.  There are a few task
 to complete before Docker is started.  To insure your Docker has not started::
 
     cd ~/IOTstack
@@ -111,16 +111,16 @@ a docker container. Therefore, the imagehub.service doesn't need to be configure
     cd ~/IOTstack
     git clone https://github.com/jeffbass/imagehub.git
 
-Change the **imagehub** data_directory in the imagehub.yaml file to your Docker data location::
+Change the **imagehub** data_directory in the ``imagehub.yaml`` file to your Docker data location::
 
     nano imagehub/imagehub.yaml
 
-Edit the data_directory field to match your installation. Change 'YOUR_HOME_DIRECTORY' to your username or folder name::
+Edit the data_directory field to match your installation. Change ``YOUR_HOME_DIRECTORY`` to your username or folder name::
 
     data_directory: /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data
 
-At the time of this installation, Node-Red didn't allow for volumes outside of nodered/data path.  Hence,
-the unusual imagehub_data location seen above.
+At the time of this installation, Node-Red didn't allow for volumes outside of ``nodered/data`` path.  Hence,
+the unusual ``imagehub_data`` location seen above.
 
 Install the **imagehub-librarian** package.  The following will install these files into the IOTstack folder::
 
@@ -129,15 +129,15 @@ Install the **imagehub-librarian** package.  The following will install these fi
     cd ~/IOTstack
 
 Several task are required prior to starting Docker.  Edit the openalpr_script.sh and change
-'YOUR_HOME_DIRECTORY' to the appropriate folder name::
+``YOUR_HOME_DIRECTORY`` to the appropriate folder name::
 
     nano openalpr_script.sh
 
-Make openalpr_script.sh executable::
+Make ``openalpr_script.sh`` executable::
 
     chmod +x openalpr_script.sh
 
-Edit the 'config.json' file, and replace 'YOUR_HOME_DIRECTORY' to the appropriate folder name.  Configure
+Edit the ``config.json`` file, and replace ``YOUR_HOME_DIRECTORY`` to the appropriate folder name.  Configure
 the email entries to match your email information ('MAIL_SERVER', 'MAIL_PORT', 'MAIL_USE_TLS', 'MAIL_USERNAME', 'MAIL_PASSWORD').
 If a 'ALPR_API_TOKEN' is available from `Plate Recognizer <https://www.platerecognizer.com/>`_, enter it in the field::
 
@@ -149,18 +149,18 @@ Build the OpenCV and Flask images::
     docker build -f flask_Dockerfile -t flask:latest .
     docker build -f opencv_Dockerfile -t opencv:latest .
 
-Rename the 'docker-compose.yml' file built by **IOTstack** and replace it with the file furnished by
+Rename the ``docker-compose.yml`` file built by **IOTstack** and replace it with the file furnished by
 **imagehub-librarian**::
 
     cd ~/IOTstack
     mv docker-compose.yml docker-compose_original.yml
     mv docker-compose_imagehub.yml docker-compose.yml
 
-Edit the 'YOUR_HOME_DIRECTORY' folder locations for Flask and opencv in the NEW 'docker-compose.yml' file::
+Edit the ``YOUR_HOME_DIRECTORY`` folder locations for Flask and opencv in the NEW ``docker-compose.yml`` file::
 
     nano docker-compose.yml
 
-Tip: Pressing 'Ctrl + \\' in nano will allow for multiple finds and replaces.
+Tip: Pressing ``Ctrl + \\`` in nano will allow for multiple finds and replaces.
 
 Docker can be started::
 
@@ -185,13 +185,13 @@ Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhos
     user: root
     password: IOtSt4ckToorMariaDb
 
-Import database located in the 'misc' folder:
-Import » "Choose Files" imagehub_mariadb_database.sql and "Execute"
+Import database located in the ``misc`` folder:
+``Import » "Choose Files" imagehub_mariadb_database.sql and "Execute"``
 
 .. image:: librarian-docs/images/mariadb_import_database.jpg
 
 Setup privileges for user 'mariadbuser'
-MySQL » mariadb » imagehub » Privileges » Create user::
+``MySQL » mariadb » imagehub » Privileges » Create user``::
 
 	User: mariadbuser
 	Password: IOtSt4ckmariaDbPw
@@ -201,30 +201,30 @@ MySQL » mariadb » imagehub » Privileges » Create user::
 
 Node-Red
 --------
-Log into Node-Red `http://localhost:1880 <http://localhost:1880>`_.  Go to the Menu->Manage palette->Install Tab->search modules, and install
-modules `node-red-contrib-stackhero-mysql` and `node-red-node-email`.
+Log into Node-Red `http://localhost:1880 <http://localhost:1880>`_.  Go to the ``Menu->Manage palette->Install Tab->search modules``, and install
+modules ``node-red-contrib-stackhero-mysql`` and ``node-red-node-email``.
 
 .. image:: librarian-docs/images/nodered_manage_palette.jpg
 
-Go to the Menu->Import->'select a file' to import the **imagehub-librarian** flow.
-select file: ~/IOTstack/misc/Image_Librarian_Dashboard_flows.json
+Go to the ``Menu->Import->'select a file'`` to import the **imagehub-librarian** flow.
+select file: ``~/IOTstack/misc/Image_Librarian_Dashboard_flows.json``
 
 .. image:: librarian-docs/images/nodered_import_flow.jpg
 
-The `Image_Librarian_Dashboard_flows.json` file import the *Image Librarian*, *ID Objects SUB* and
+The ``Image_Librarian_Dashboard_flows.json`` file import the *Image Librarian*, *ID Objects SUB* and
 *ALPR SUB* flows.  The *Image Librarian* flow is the primary flow that triggers events in the *ID Objects SUB* and
-*ALPR SUB* via MQTT messages passed between the other flows and the `MQTT_client.py` module.
+*ALPR SUB* via MQTT messages passed between the other flows and the ``MQTT_client.py`` module.
 
 .. image:: librarian-docs/images/nodered_image_librarian_flow.jpg
 .. image:: librarian-docs/images/nodered_id_objects_sub_flow.jpg
 .. image:: librarian-docs/images/nodered_alpr_sub_flow.jpg
 
 The **Configuration Directories** node of the **Image Librarian** flow requires modification.  Double click the node, and
-edit each of the fields containing directories with *YOUR_HOME_DIRECTORY*.
+edit each of the fields containing directories with ``YOUR_HOME_DIRECTORY``.
 
 .. image:: librarian-docs/images/nodered_configuration_directories.jpg
 
-Connect the data modules 'imagehub DB' nodes to MariaDB 'imagehub' Database::
+Connect the data modules *imagehub DB* nodes to MariaDB *imagehub* Database::
 
     Host: mariadb
     Port: 3306
@@ -236,8 +236,8 @@ Connect the data modules 'imagehub DB' nodes to MariaDB 'imagehub' Database::
 .. image:: librarian-docs/images/nodered_imagehub_DB_edit.jpg
 .. image:: librarian-docs/images/nodered_imagehub_DB_Database_config.jpg
 
-If you wish to receive Text messages from Node-Red for specific events, you will need to setup a Google Voice account
-and then edit the **email Google Voice** node as shown below.  This node could just as easily be configured to send emails to
+If you wish to receive Text messages from Node-Red for specific events, you will need to setup a *Google Voice* account
+and then edit the **email Google Voice** node as shown below.  This node could just as easily be configured to only send emails to
 a standard email account.
 
 .. image:: librarian-docs/images/nodered_email_google_voice_node.jpg
@@ -251,7 +251,7 @@ Log into Grafana `http://localhost:3000 <http://localhost:3000>`_ ::
     password: admin
     change password if you wish or Skip
 
-First, configure the database used by Grafana by going to menu Configuration -> Data Source::
+First, configure the database used by Grafana by going to menu ``Configuration -> Data Source``::
 
     Data Service MySQL
     name: MySQL
@@ -262,8 +262,8 @@ First, configure the database used by Grafana by going to menu Configuration -> 
 
 .. image:: librarian-docs/images/grafana_database_config.jpg
 
-Next, install a JSON configuration file, ALPR_Events-grafana.json located in the 'misc' folder, with charts and tables for the 'imagehub' database.
-Go to menu Dashboards -> Manage::
+Next, install a JSON configuration file, ``ALPR_Events-grafana.json`` located in the ``misc`` folder, with charts and tables for the *imagehub* database.
+Go to menu ``Dashboards -> Manage``::
 
     Import -> ALPR_Events-grafana.json
     Name: ALPR Events
@@ -274,7 +274,7 @@ Go to menu Dashboards -> Manage::
 
 Flask
 -----
-Before images are accessible from Flask, a link to the image folder must be created.  Change 'YOUR_HOME_DIRECTORY' to the
+Before images are accessible from Flask, a link to the image folder must be created.  Change ``YOUR_HOME_DIRECTORY`` to the
 appropriate folder name::
 
     cd /home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static
@@ -303,7 +303,7 @@ The Docker containers currently running can be monitored via the following comma
 
   docker ps -a
 
-The Docker images created by IOTstack and imagehub-librarian can be seen via::
+The Docker images created by **IOTstack** and **imagehub-librarian** can be seen via::
 
    docker images
 
