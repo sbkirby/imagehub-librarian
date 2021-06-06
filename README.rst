@@ -115,11 +115,11 @@ Change the **imagehub** data_directory in the ``imagehub.yaml`` file to your Doc
 
     nano imagehub/imagehub.yaml
 
-Edit the data_directory field to match your installation. Change ``YOUR_HOME_DIRECTORY`` to your username or folder name::
+Edit the ``data_directory`` field of ``imagehub.yaml`` to match your installation as seen below. Change ``YOUR_HOME_DIRECTORY`` to your username or folder name::
 
     data_directory: /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data
 
-At the time of this installation, Node-Red didn't allow for volumes outside of ``nodered/data`` path.  Hence,
+At the time of this installation, Node-Red didn't allow for volumes outside of ``/home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data`` path.  Hence,
 the unusual ``imagehub_data`` location seen above.
 
 Install the **imagehub-librarian** package.  The following will install these files into the IOTstack folder::
@@ -143,7 +143,7 @@ If a 'ALPR_API_TOKEN' is available from `Plate Recognizer <https://www.platereco
 
     nano config.json
 
-Build the OpenCV and Flask images::
+Build the OpenCV and Flask images for Docker.  Be sure to include the 'period' in the following commands::
 
     cd ~/IOTstack/docker
     docker build -f flask_Dockerfile -t flask:latest .
@@ -201,6 +201,8 @@ Setup privileges for user 'mariadbuser'
 
 Node-Red
 --------
+Import Modules
+^^^^^^^^^^^^^^
 Log into Node-Red `http://localhost:1880 <http://localhost:1880>`_.  Go to the ``Menu->Manage palette->Install Tab->search modules``, and install
 modules ``node-red-contrib-stackhero-mysql`` and ``node-red-node-email``.
 
@@ -211,6 +213,8 @@ select file: ``~/IOTstack/misc/Image_Librarian_Dashboard_flows.json``
 
 .. image:: librarian-docs/images/nodered_import_flow.jpg
 
+Import Flows
+^^^^^^^^^^^^
 The ``Image_Librarian_Dashboard_flows.json`` file import the *Image Librarian*, *ID Objects SUB* and
 *ALPR SUB* flows.  The *Image Librarian* flow is the primary flow that triggers events in the *ID Objects SUB* and
 *ALPR SUB* via MQTT messages passed between the other flows and the ``MQTT_client.py`` module.
@@ -219,11 +223,15 @@ The ``Image_Librarian_Dashboard_flows.json`` file import the *Image Librarian*, 
 .. image:: librarian-docs/images/nodered_id_objects_sub_flow.jpg
 .. image:: librarian-docs/images/nodered_alpr_sub_flow.jpg
 
+Configure Directories
+^^^^^^^^^^^^^^^^^^^^^
 The **Configuration Directories** node of the **Image Librarian** flow requires modification.  Double click the node, and
 edit each of the fields containing directories with ``YOUR_HOME_DIRECTORY``.
 
 .. image:: librarian-docs/images/nodered_configuration_directories.jpg
 
+Configure imagehub DB module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Connect the data modules *imagehub DB* nodes to MariaDB *imagehub* Database::
 
     Host: mariadb
@@ -236,6 +244,8 @@ Connect the data modules *imagehub DB* nodes to MariaDB *imagehub* Database::
 .. image:: librarian-docs/images/nodered_imagehub_DB_edit.jpg
 .. image:: librarian-docs/images/nodered_imagehub_DB_Database_config.jpg
 
+Configure email Google Voice
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 If you wish to receive Text messages from Node-Red for specific events, you will need to setup a *Google Voice* account
 and then edit the **email Google Voice** node as shown below.  This node could just as easily be configured to only send emails to
 a standard email account.
@@ -251,6 +261,8 @@ Log into Grafana `http://localhost:3000 <http://localhost:3000>`_ ::
     password: admin
     change password if you wish or Skip
 
+Data Source
+^^^^^^^^^^^
 First, configure the database used by Grafana by going to menu ``Configuration -> Data Source``::
 
     Data Service MySQL
@@ -262,6 +274,8 @@ First, configure the database used by Grafana by going to menu ``Configuration -
 
 .. image:: librarian-docs/images/grafana_database_config.jpg
 
+Import JSON Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^
 Next, install a JSON configuration file, ``ALPR_Events-grafana.json`` located in the ``misc`` folder, with charts and tables for the *imagehub* database.
 Go to menu ``Dashboards -> Manage``::
 
