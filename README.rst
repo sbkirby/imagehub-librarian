@@ -171,12 +171,14 @@ All of the containers currently running can be seen via::
 
     docker ps -a
 
+.. image:: librarian-docs/images/docker_ps_a.jpg
+
 Configure Docker Images
------------------------
+=======================
 Next, configure each of the docker containers with files furnished by **imagehub-librarian**.
 
 MariaDB
-^^^^^^^
+-------
 Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhost:9080>`_ ::
 
     server: mariadb
@@ -198,16 +200,29 @@ MySQL » mariadb » imagehub » Privileges » Create user::
 .. image:: librarian-docs/images/mariadb_privileges_create_user.jpg
 
 Node-Red
-^^^^^^^^
+--------
 Log into Node-Red `http://localhost:1880 <http://localhost:1880>`_.  Go to the Menu->Manage palette->Install Tab->search modules, and install
-modules 'node-red-contrib-stackhero-mysql' and 'node-red-node-email'.
+modules `node-red-contrib-stackhero-mysql` and `node-red-node-email`.
 
 .. image:: librarian-docs/images/nodered_manage_palette.jpg
 
 Go to the Menu->Import->'select a file' to import the **imagehub-librarian** flow.
-select file: ~/IOTstack/node-red/Image_Hub_Dashboard_flows.json
+select file: ~/IOTstack/misc/Image_Librarian_Dashboard_flows.json
 
 .. image:: librarian-docs/images/nodered_import_flow.jpg
+
+The `Image_Librarian_Dashboard_flows.json` file import the *Image Librarian*, *ID Objects SUB* and
+*ALPR SUB* flows.  The *Image Librarian* flow is the primary flow that triggers events in the *ID Objects SUB* and
+*ALPR SUB* via MQTT messages passed between the other flows and the `MQTT_client.py` module.
+
+.. image:: librarian-docs/images/nodered_image_librarian_flow.jpg
+.. image:: librarian-docs/images/nodered_id_objects_sub_flow.jpg
+.. image:: librarian-docs/images/nodered_alpr_sub_flow.jpg
+
+The **Configuration Directories** node of the **Image Librarian** flow requires modification.  Double click the node, and
+edit each of the fields containing directories with *YOUR_HOME_DIRECTORY*.
+
+.. image:: librarian-docs/images/nodered_configuration_directories.jpg
 
 Connect the data modules 'imagehub DB' nodes to MariaDB 'imagehub' Database::
 
@@ -221,8 +236,15 @@ Connect the data modules 'imagehub DB' nodes to MariaDB 'imagehub' Database::
 .. image:: librarian-docs/images/nodered_imagehub_DB_edit.jpg
 .. image:: librarian-docs/images/nodered_imagehub_DB_Database_config.jpg
 
+If you wish to receive Text messages from Node-Red for specific events, you will need to setup a Google Voice account
+and then edit the **email Google Voice** node as shown below.  This node could just as easily be configured to send emails to
+a standard email account.
+
+.. image:: librarian-docs/images/nodered_email_google_voice_node.jpg
+
+
 Grafana
-^^^^^^^
+-------
 Log into Grafana `http://localhost:3000 <http://localhost:3000>`_ ::
 
     username: admin
@@ -251,7 +273,7 @@ Go to menu Dashboards -> Manage::
 .. image:: librarian-docs/images/grafana_import_dashboard.jpg
 
 Flask
-^^^^^
+-----
 Before images are accessible from Flask, a link to the image folder must be created.  Change 'YOUR_HOME_DIRECTORY' to the
 appropriate folder name::
 
@@ -266,12 +288,20 @@ Running imagehub-librarian
 
 Docker
 ------
+All ``docker-compose`` commands must be executed within the folder containing the ``docker-compose.yml`` file.
+Starting Docker in detached mode::
+
+   cd ~/IOTstack
+   docker-compose up -d
+
+Stopping Docker::
+
+   cd ~/IOTstack
+   docker-compose down
 
 The Docker containers currently running can be monitored via the following command::
 
   docker ps -a
-
-.. image:: librarian-docs/images/docker_ps_a.jpg
 
 The Docker images created by IOTstack and imagehub-librarian can be seen via::
 
