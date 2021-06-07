@@ -75,6 +75,10 @@ Depending on which flags are set ``trigger_audio`` and/or ``trigger_twilio`` as 
 ``CUSTOM: Check for twilio trigger`` and/or ``CUSTOM: Check for audio trigger``.  Note: This application does not require
 Twilio...It was used at one time, and the variables remain to confuse me and you.
 
+Adding images to the ``imagehub`` database and checking for objects.
+
+.. image:: images/nodered_watch_images.jpg
+
 watch /data/imagehub_data/images
 --------------------------------
 Any changes to the ``images`` folder will trigger a *watch* event similar to the following::
@@ -88,10 +92,6 @@ Any changes to the ``images`` folder will trigger a *watch* event similar to the
    "type":"file",
    "_msgid":"efc2c3a1.bd67"
    }
-
-Adding images to the ``imagehub`` database and checking for objects.
-
-.. image:: images/nodered_watch_images.jpg
 
 add image name to DB
 --------------------
@@ -115,3 +115,68 @@ image data into the ``images`` table::
    "_msgid":"e15ff849.3423c8"
    }
 
+MQTT: Check new image for objects
+---------------------------------
+A ``delay 2 seconds`` is inserted in the process link to delay the MQTT message to the ``MQTT_client.py`` module in order
+to give the database ample time to store the image data in ``imagehub`` database.  The ``MQTT: Check new image for objects``
+node monitors the messages from the *watch* node, and if the ``Chk_Objects`` field of the ``camera_nodes`` table are **True**
+a MQTT message will be sent to the ``MQTT_client.py`` to check for objects::
+
+   {
+   "payload":"/data/volumes/nodered/data/imagehub_data/images/2021-06-07/Driveway-RPiCam7-2021-06-07T10.40.31.345038.jpg",
+   "topic":"image/id_objects/get_objects",
+   "file":"Driveway-RPiCam7-2021-06-07T10.40.31.345038.jpg",
+   "filename":"/data/imagehub_data/images/2021-06-07/Driveway-RPiCam7-2021-06-07T10.40.31.345038.jpg",
+   "size":20480,
+   "type":"file",
+   "_msgid":"9dc555e0.07a018",
+   "image":"Driveway-RPiCam7-2021-06-07T10.40.31.345038.jpg"
+   }
+
+Find last image for each camera to display
+------------------------------------------
+The python module ``dashboard.py`` uses the ``latest_images.json`` file as its data source to display the "Latest" images
+from each camera with the ``Display`` field of the ``camera_nodes`` set to **True**::
+
+   {
+   "payload":{"cameras_id":[1,2,3,4,8]},
+   "topic":
+      "SELECT images.*
+      FROM
+         (SELECT camera_id, MAX(image) AS image
+         FROM images
+         WHERE camera_id IN (:cameras_id)
+         GROUP BY camera_id) AS latest_images
+      INNER JOIN images ON images.camera_id = latest_images.camera_id AND images.image = latest_images.image;",
+   "file":"StreetView-RPiCam6-2021-06-07T10.52.15.312544.jpg",
+   "filename":"/data/imagehub_data/images/2021-06-07/StreetView-RPiCam6-2021-06-07T10.52.15.312544.jpg",
+   "size":40960,
+   "type":"file",
+   "_msgid":"1d8757b9.df0ce8"
+   }
+
+The output of this query is formated by the ``JSON format latest images payload`` node, and passed on to the ``create data file``
+node.  If need be, the ``latest_images.json`` file may be created manually with the ``manually create\n latest_images.json file``
+node.
+
+Configure/Edit the Directories
+------------------------------
+.. image:: images/nodered_configuration_directories.jpg
+
+The ``Configuration Directories`` node contains the list of directories used with the **Image Librarian** flows.  The folders containing
+``YOUR_HOME_DIRECTORY`` require editing to match your installation.  These entries are used to create the **global**
+variables available to all the flows as seen below:
+
+.. image:: images/nodered_global_variables.jpg
+
+Build flow variables from imagehub.camera_nodes Table
+-----------------------------------------------------
+This section generates the **global** variables from the entries in the ``camera_nodes`` table.  It creates a list of
+the cameras for 'Display', 'Chk_Objects', 'ALPR' and 'Twilio_Enabled', as well the cataloging the 'ROI_name' and the
+'Message' for each entry.  Examples of these variables can be seen in the image above.
+
+Purge Db and Delete Folders
+---------------------------
+The ``Routine Purge of Images and Db Entries`` node contains the ``msg.daystokeep`` value used to determine the number
+of days of images to keep.  This runs each evening after midnight, and builds a ``purge_folders.json`` file used by
+``purge_folders.py``
