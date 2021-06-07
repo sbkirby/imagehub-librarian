@@ -89,6 +89,10 @@ Any changes to the ``images`` folder will trigger a *watch* event similar to the
    "_msgid":"efc2c3a1.bd67"
    }
 
+Adding images to the ``imagehub`` database and checking for objects.
+
+.. image:: images/nodered_watch_images.jpg
+
 add image name to DB
 --------------------
 This node monitors the *watch* node, and if certain parameters pass the test a SQL call is configured to insert the
