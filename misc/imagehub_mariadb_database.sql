@@ -90,6 +90,8 @@ CREATE TABLE `license_plates` (
   UNIQUE KEY `license` (`license`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `license_plates` (`ID`, `license`, `color`, `type`, `identified`) VALUES
+(1,	'UNKNOWN',	'unknown',	'unknown',	'unknown');
 
 CREATE TABLE `objects` (
   `ID` int(11) NOT NULL,
