@@ -4,8 +4,8 @@ Node-Red Settings and How it Works
 
 .. contents::
 
-Image Librarian
-===============
+Image Librarian Flow
+====================
 
 tail imagehub.log
 -----------------
@@ -178,5 +178,178 @@ the cameras for 'Display', 'Chk_Objects', 'ALPR' and 'Twilio_Enabled', as well t
 Purge Db and Delete Folders
 ---------------------------
 The ``Routine Purge of Images and Db Entries`` node contains the ``msg.daystokeep`` value used to determine the number
-of days of images to keep.  This runs each evening after midnight, and builds a ``purge_folders.json`` file used by
-``purge_folders.py``
+of days to keep images.  This runs each evening after midnight, and builds a ``purge_folders.json`` file used by
+``purge_folders.py``.  In addition to purging images from the server, this will purge entries older than ``msg.daystokeep``
+in three tables of the ``imagehub`` database.
+
+ID Objects SUB Flow
+===================
+This is a **MQTT SUBSCRIPTION** for **TOPIC** ``image/id_objects/count``.  This receives MQTT messages from ``MQTT_client.py``
+with the object detection results for each analyzed image.
+
+.. image:: images/nodered_id_objects_sub_flow.jpg
+
+INSERT INTO ImageObjects DB
+---------------------------
+This node processes the MQTT messages and inserts the object data into the ``image_objects`` table::
+
+  {
+  "topic":
+     "INSERT IGNORE INTO image_objects (datetime, image_id, object_id, count)
+     VALUES (:datetime, :image_id, :object_id, :count);",
+  "payload":{
+     "datetime":"2021-06-07T14:53:24.692104",
+     "image_id":"Backporch-RPiCam5-2021-06-07T14.53.24.692104.jpg",
+     "object_id":"person",
+     "count":1
+     },
+  "qos":1,
+  "retain":false,
+  "_msgid":"150261bf.2c586e",
+  "results":{"person":1}
+  }
+
+Check License Plate of images from specified cameras
+----------------------------------------------------
+If the ``ALPR`` field of the ``camera_nodes`` Table is **True**, and a 'car', 'truck' or 'motorbike' appear in the image
+this function node will build a query to select the images for ``ALPR SUB Flow`` processing.  The query is ``delayed 5 seconds``
+to allow for the object data to be stored in the ``image_objects`` Table.  The results of the ``imagehub DB`` are as follows::
+
+   {
+   "topic":
+      "SELECT image_id
+      FROM image_objects
+      WHERE image_id LIKE \"%RPiCam4%\" AND (datetime >= \"2021-06-07 19:46:36\" AND datetime < \"2021-06-07 19:46:46\")
+      AND object_id IN (\"car\",\"truck\",\"motorbike\")",
+   "payload":[
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.40.746435.jpg"},
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.40.981745.jpg"},
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.41.223360.jpg"},
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.41.467526.jpg"},
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.41.735559.jpg"},
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.41.975115.jpg"},
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.42.234091.jpg"},
+      {"image_id":"StreetView-RPiCam4-2021-06-07T19.46.42.477552.jpg"}
+      ],
+   "qos":1,
+   "retain":false,
+   "_msgid":"b7bb6bdd.3fd2e8",
+   "results":{"car":1},
+   "datetime":"2021-06-08T00:46:41.467Z"
+   }
+
+Pick images for License Plate check
+-----------------------------------
+This function node selects two images from a list, and constructs a MQTT message to send to the ``ALPR SUB Flow``::
+
+   {
+   "topic":"image/alpr/get_license",
+   "payload":{
+      "filename":[
+         "/home/stephen/IOTstack/volumes/nodered/data/imagehub_data/images/2021-06-07/StreetView-RPiCam4-2021-06-07T19.46.40.981745.jpg",
+         "/home/stephen/IOTstack/volumes/nodered/data/imagehub_data/images/2021-06-07/StreetView-RPiCam4-2021-06-07T19.46.42.234091.jpg"
+         ]},
+   "qos":1,
+   "retain":false,
+   "_msgid":"ff989c35.f9e6",
+   "results":{"car":1},
+   "datetime":"2021-06-08T00:46:41.467Z"
+   }
+
+ALPR SUB Flow
+=============
+The **ALPR SUBSCRIPTION Flow** receives the MQTT message results from ``MQTT_client.py``::
+
+   {
+   "topic":"image/alpr/results",
+   "payload":{
+      "processing_time":109.041,
+      "results":[
+         {
+            "box":{"xmin":418,"ymin":400,"xmax":508,"ymax":450},
+            "plate":"nkl0252",
+            "region":{"code":"us-tx","score":0.866},
+            "score":0.899,
+            "candidates":[{"score":0.899,"plate":"nkl0252"}],
+            "dscore":0.782,
+            "vehicle":{"score":0.784,"type":"SUV","box":{"xmin":0,"ymin":172,"xmax":686,"ymax":724}}}],
+            "filename":"1405_eBtcL_StreetView-RPiCam4-2021-06-08T09.04.50.986564.jpg",
+            "version":1,
+            "camera_id":null,
+            "timestamp":"2021-06-08T14:05:00.134251Z"
+         },
+   "qos":1,
+   "retain":false,
+   "_msgid":"7e6fe204.7c7cdc"
+   }
+
+JSONize msg.payload and Results NULL or NOT
+-------------------------------------------
+The messages are JSON'ized via the ``JSONize msg.payload`` node and the ``msg.results`` are tested for *NULL* or
+*NOT NULL* in the ``Results NULL or NOT`` node.
+
+SELECT * FROM LicensePlates DB
+------------------------------
+If the ``msg.results`` are *NOT NULL* from the ``Results NULL or NOT`` node, a query is performed on the
+``msg.payload.results[0].plate.toUpperCase()`` to find the closest match via the ``SELECT * FROM LicensePlates DB`` node::
+
+  {
+  "topic":
+     "SELECT * FROM license_plates
+     WHERE (`license` = :plate OR `license` LIKE :plate1 OR `license` LIKE :plate2)",
+  "payload":[{"ID":11,"license":"LNX2062","color":"dark blue","type":"truck","identified":"known"}],
+  "qos":1,
+  "retain":false,
+  "_msgid":"27f384ff.05ca2c",
+  "plate":"LNX2062",
+  "image":"StreetView-RPiCam4-2021-06-08T09.23.34.783643.jpg",
+  "score":0.88,
+  "processing_time":211.701,
+  "vehicle_type":"suv",
+  "datetime":"2021-06-08T09:23:34.783643"
+  }
+
+IS NULL - INSERT INTO ALPR_Events DB
+------------------------------------
+If the ``msg.results`` are *NULL* from the ``Results NULL or NOT`` node, a query is performed on the
+``msg.payload.results[0].plate.toUpperCase()`` to find the closest match via the ``SELECT * FROM LicensePlates DB`` node::
+
+Query Results of LicensePlates NULL or NOT
+------------------------------------------
+This node checks the ``msg.payload[0]`` to see if it is *NULL* OR *NOT NULL*.
+
+INSERT INTO ALPR_Events DB
+--------------------------
+If the ``Query Results of LicensePlates NULL or NOT`` is *NOT NULL*, the data is INSERT'd into the ``alpr_events`` Table
+and ``msg.add_licenseplate`` is set to *false*::
+
+   {
+   "topic":
+      "INSERT INTO alpr_events (license_id, datetime, image_id, processing_time)
+      VALUES (:license_id, :datetime, :image_id, :processing_time)",
+   "payload":{"fieldCount":0,"affectedRows":1,"insertId":10841,"info":"","serverStatus":2,"warningStatus":0},
+   "qos":1,
+   "retain":false,
+   "_msgid":"77fef66.5b28b08",
+   "plate":"HVK6508",
+   "image":"StreetView-RPiCam4-2021-06-08T09.29.51.079569.jpg",
+   "score":0.905,
+   "processing_time":227.195,
+   "vehicle_type":"sedan",
+   "datetime":"2021-06-08T09:29:51.079569",
+   "add_licenseplate":false
+   }
+
+INSERT INTO LicensePlates DB
+----------------------------
+If the ``Query Results of LicensePlates NULL or NOT`` is *NULL*, the data is INSERT'd into the ``license_plates`` Table
+and ``msg.add_licenseplate`` is set to *true*::
+
+
+IF msg.add_licenseplate = true add ALPR_Event
+---------------------------------------------
+
+CUSTOM: check for Newspaper vehicle
+-----------------------------------
+This is an example of monitoring ALPR Events for a specific License Plate.  When the plate is matched it sends an email
+or Text message to the specified address.
