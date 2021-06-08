@@ -34,11 +34,11 @@ CREATE TABLE `camera_nodes` (
   `ALPR` tinyint(4) unsigned zerofill NOT NULL,
   `ROI_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Message` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Twilio_Enabled` tinyint(4) unsigned zerofill NOT NULL,
+  `Text_Enabled` tinyint(4) unsigned zerofill NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `camera_nodes` (`ID`, `NodeName`, `ViewName`, `CameraType`, `Display`, `Chk_Objects`, `ALPR`, `ROI_name`, `Message`, `Twilio_Enabled`) VALUES
+INSERT INTO `camera_nodes` (`ID`, `NodeName`, `ViewName`, `CameraType`, `Display`, `Chk_Objects`, `ALPR`, `ROI_name`, `Message`, `Text_Enabled`) VALUES
 (1,	'Imagehub',	'Imagehub',	'None',	0000,	0000,	0000,	'',	'',	0000);
 
 CREATE TABLE `events` (
