@@ -36,7 +36,7 @@ def add_camera():
                              ALPR=form.ALPR.data,
                              ROI_name=form.ROI_name.data,
                              Message=form.Message.data,
-                             Twilio_Enabled=form.Twilio_Enabled.data)
+                             Text_Enabled=form.Text_Enabled.data)
         db.session.add(camera)
         db.session.commit()
         flash('Your camera has been created!', 'success')
@@ -65,7 +65,7 @@ def update_camera(camera_id):
         camera.ALPR = form.ALPR.data
         camera.ROI_name = form.ROI_name.data
         camera.Message = form.Message.data
-        camera.Twilio_Enabled = form.Twilio_Enabled.data
+        camera.Text_Enabled = form.Text_Enabled.data
         db.session.commit()
         flash('Your camera has been updated!', 'success')
         return redirect(url_for('cameras.camera', camera_id=camera.ID))
@@ -78,7 +78,7 @@ def update_camera(camera_id):
         form.ALPR.data = camera.ALPR
         form.ROI_name.data = camera.ROI_name
         form.Message.data = camera.Message
-        form.Twilio_Enabled.data = camera.Twilio_Enabled
+        form.Text_Enabled.data = camera.Text_Enabled
     return render_template('create_camera.html', title='Update Camera',
                            form=form, legend='Update Camera')
 
