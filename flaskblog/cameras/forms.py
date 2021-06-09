@@ -18,6 +18,6 @@ class CameraNodesForm(FlaskForm):
     ALPR = BooleanField('ALPR')
     ROI_name = StringField('ROI_name')
     Message = StringField('Message')
-    Twilio_Enabled = BooleanField('Twilio Enabled')
+    Text_Enabled = BooleanField('Text Enabled')
     submit = SubmitField('Submit')
 
