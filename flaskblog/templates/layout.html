@@ -22,7 +22,7 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/">Imagehub</a>
+            <a class="navbar-brand mr-4" href="/">Image Librarian</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -77,7 +77,7 @@
                         <li class="list-group-item list-group-item-action list-group-item-light small"><a href="{{ url_for('cameras.cameras_list', link_id='update') }}">Update Camera</a></li>
                         <li class="list-group-item list-group-item-action list-group-item-light small"><a href="{{ url_for('cameras.add_camera') }}">Add Camera</a></li>
                     </ul>
-                    <li class="list-group-item h6">Cameras Event Logs</li>
+                    <li class="list-group-item h6">Camera Event Logs</li>
                     <ul>
                         <li class="list-group-item list-group-item-action list-group-item-light small"><a href="{{ url_for('cameras.cameras_list', link_id='events') }}">Events for select Camera</a></li>
                         <li class="list-group-item list-group-item-action list-group-item-light small"><a href="{{ url_for('events.latest_events', link_id='events') }}">Latest event for all active Cameras</a></li>
@@ -98,7 +98,7 @@
                     </ul>
                     {% else %}
                     <li class="list-group-item h6">Cameras</li>
-                    <li class="list-group-item h6">Cameras Event Logs</li>
+                    <li class="list-group-item h6">Camera Event Logs</li>
                     <li class="list-group-item h6">License Plates</li>
                     <li class="list-group-item h6">Objects</li>
                     {% endif %}
