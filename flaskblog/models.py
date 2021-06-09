@@ -65,7 +65,7 @@ class CameraNodes(db.Model):
     ALPR = db.Column(db.Boolean, nullable=False)
     ROI_name = db.Column(db.String(50), nullable=False)
     Message = db.Column(db.String(120), nullable=False)
-    Twilio_Enabled = db.Column(db.Boolean, nullable=False)
+    Text_Enabled = db.Column(db.Boolean, nullable=False)
     images = db.relationship('Images', backref='camera', lazy=True)
     events = db.relationship('Events', backref='event', lazy=True)
 
