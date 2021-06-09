@@ -110,16 +110,16 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.Twilio_Enabled.label(class="form-control-label") }}
-                {% if form.Twilio_Enabled.errors %}
-                    {{ form.Twilio_Enabled(class="form-control is-invalid") }}
+                {{ form.Text_Enabled.label(class="form-control-label") }}
+                {% if form.Text_Enabled.errors %}
+                    {{ form.Text_Enabled(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.Twilio_Enabled.errors %}
+                        {% for error in form.Text_Enabled.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.Twilio_Enabled(class="form-control") }}
+                    {{ form.Text_Enabled(class="form-control") }}
                 {% endif %}
             </div>
         </fieldset>
