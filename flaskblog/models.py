@@ -128,7 +128,7 @@ class ImageObjects(db.Model):
     ID = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime, nullable=False)
     image_id = db.Column(db.String(75), db.ForeignKey('images.image'), nullable=False)
-    object_id = db.Column(db.String(120), db.ForeignKey('objects.ID'), nullable=False)
+    object_id = db.Column(db.String(120), db.ForeignKey('objects.ObjectName'), nullable=False)
     count = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
