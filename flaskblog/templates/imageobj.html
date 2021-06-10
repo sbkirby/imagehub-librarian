@@ -8,7 +8,7 @@
         <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
       </div>
     </div>
-    <h4 class="article-title">Object Name: <a href="{{ url_for('imageobjs.imageobjs_list', imageobj_id=imageobj.ID) }}">{{ imageobj.objects.ObjectName }}</a></h4>
+    <h4 class="article-title">Object Name: <a href="{{ url_for('objects.object_images', object_id=imageobj.objects.ID) }}">{{ imageobj.object_id }}</a></h4>
     <p class="article-content"><b>Datetime:</b> {{ imageobj.datetime }}</p>
     <p class="article-content"><b>Image:</b> {{ imageobj.image_id }}</p>
     <p class="article-content"><b>Object:</b> {{ imageobj.object_id }}</p>
