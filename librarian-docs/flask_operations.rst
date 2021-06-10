@@ -221,7 +221,24 @@ be taken in deleting entries in this Table since other Tables point to these ent
 Add License Plate
 -----------------
 Add a License Plate.
+
 .. image:: images/flask_add_license_plate.jpg
+
+license
+^^^^^^^
+Enter the License Plate Number in Uppercase.
+
+color
+^^^^^
+Enter the color of the vehicle.
+
+type
+^^^^
+Enter the type of vehicle (e.g. car, suv, sedan, pickup truck, big truck, etc.).
+
+identified
+^^^^^^^^^^
+Enter any identifying information in this field.
 
 Objects
 =======
@@ -240,13 +257,14 @@ View images and update Object data for images.  Click the object link below the 
 
 Update Object
 -------------
-Depricated
+Depricated.
 
 .. image:: images/flask_update_delete_object.jpg
 .. image:: images/flask_update_object.jpg
 
 Add Object
 ----------
-Depricated
+Depricated.  The Objects detected by this application are defined in the ``~/IOTstack/tools/coco.names`` file.  Many of
+these are household items, and are unlikely to be detected in outdoor cameras.
 
 .. image:: images/flask_add_object.jpg
