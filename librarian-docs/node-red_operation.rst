@@ -62,7 +62,10 @@ stored in the database. Example of the ``CUSTOM: Check ROI's for Objects`` and r
       AND (datetime >= \"2021-06-07 09:24:40\" AND datetime < \"2021-06-07 09:25:00\")
       AND object_id IN (\"person\",\"dog\",\"cat\")
       GROUP BY object_id",
-   "payload":[{"COUNT(object_id)":1,"object_id":"person"}],
+   "payload":[
+      {"COUNT(object_id)":1,
+      "object_id":"person"}
+      ],
    "_msgid":"24f44d11.9af8b2",
    "trigger_audio":true,
    "trigger_text":false,
@@ -298,7 +301,13 @@ If the ``msg.results`` are *NOT NULL* from the ``ALPR Results NULL or NOT NULL``
   "topic":
      "SELECT * FROM license_plates
      WHERE (`license` = :plate OR `license` LIKE :plate1 OR `license` LIKE :plate2)",
-  "payload":[{"ID":11,"license":"LNX2062","color":"dark blue","type":"truck","identified":"known"}],
+  "payload":[
+     {"ID":11,
+     "license":"LNX2062",
+     "color":"dark blue",
+     "type":"truck",
+     "identified":"known"}
+     ],
   "qos":1,
   "retain":false,
   "_msgid":"27f384ff.05ca2c",
@@ -319,7 +328,12 @@ If the ``msg.results`` are *NULL* from the ``ALPR Results NULL or NOT NULL`` nod
   "topic":
      "INSERT INTO alpr_events (license_id, datetime, image_id, processing_time)
      VALUES (:license_id, :datetime, :image_id, :processing_time)",
-  "payload":{"license_id":1,"datetime":"2021-06-09T17:59:51","image_id":"StreetView-RPiCam4-2021-06-09T17.59.42.223840.jpg","processing_time":110.603},
+  "payload":{
+     "license_id":1,
+     "datetime":"2021-06-09T17:59:51",
+     "image_id":"StreetView-RPiCam4-2021-06-09T17.59.42.223840.jpg",
+     "processing_time":110.603
+     },
   "qos":1,
   "retain":false,
   "_msgid":"2eb2307a.5551d",
@@ -342,7 +356,14 @@ and ``msg.add_licenseplate`` is set to *false*::
    "topic":
       "INSERT INTO alpr_events (license_id, datetime, image_id, processing_time)
       VALUES (:license_id, :datetime, :image_id, :processing_time)",
-   "payload":{"fieldCount":0,"affectedRows":1,"insertId":10841,"info":"","serverStatus":2,"warningStatus":0},
+   "payload":{
+      "fieldCount":0,
+      "affectedRows":1,
+      "insertId":10841,
+      "info":"",
+      "serverStatus":2,
+      "warningStatus":0
+      },
    "qos":1,
    "retain":false,
    "_msgid":"77fef66.5b28b08",
@@ -364,7 +385,12 @@ and ``msg.add_licenseplate`` is set to *true*::
   "topic":
      "INSERT INTO license_plates (license, color, type, identified)
      VALUES (:license, :color, :type, :identified)",
-  "payload":{"license":"PDH6456","color":"unknown","type":"pickup truck","identified":"unknown"},
+  "payload":{
+     "license":"PDH6456",
+     "color":"unknown",
+     "type":"pickup truck",
+     "identified":"unknown"
+     },
   "qos":1,
   "retain":false,
   "_msgid":"5ba0f181.95898",
