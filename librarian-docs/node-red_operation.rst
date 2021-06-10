@@ -65,15 +65,14 @@ stored in the database. Example of the ``CUSTOM: Check ROI's for Objects`` and r
    "payload":[{"COUNT(object_id)":1,"object_id":"person"}],
    "_msgid":"24f44d11.9af8b2",
    "trigger_audio":true,
-   "trigger_twilio":false,
+   "trigger_text":false,
    "ROI_Message":"is at the backdoor"
    }
 
-CUSTOM: Check for twilio trigger and/or CUSTOM: Check for audio trigger
+CUSTOM: Check for Text trigger and/or CUSTOM: Check for audio trigger
 -----------------------------------------------------------------------
-Depending on which flags are set ``trigger_audio`` and/or ``trigger_twilio`` as to which node(s) are triggered, either
-``CUSTOM: Check for twilio trigger`` and/or ``CUSTOM: Check for audio trigger``.  Note: This application does not require
-Twilio...It was used at one time, and the variables remain to confuse me and you.
+Depending on which flags are set ``trigger_audio`` and/or ``trigger_text`` as to which node(s) are triggered, either
+``CUSTOM: Check for Text trigger`` and/or ``CUSTOM: Check for audio trigger``.
 
 Adding images to the ``imagehub`` database and checking for objects.
 
@@ -96,7 +95,7 @@ Any changes to the ``images`` folder will trigger a *watch* event similar to the
 add image name to DB
 --------------------
 This node monitors the *watch* node, and if certain parameters pass the test a SQL call is configured to insert the
-image data into the ``images`` table::
+image data into the ``images`` TABLE::
 
    {
    "payload":
@@ -136,7 +135,7 @@ a MQTT message will be sent to the ``MQTT_client.py`` to check for objects::
 Find last image for each camera to display
 ------------------------------------------
 The python module ``dashboard.py`` uses the ``latest_images.json`` file as its data source to display the "Latest" images
-from each camera with the ``Display`` field of the ``camera_nodes`` set to **True**::
+from each camera with the ``Display`` field of the ``camera_nodes`` TABLE set to **True**::
 
    {
    "payload":{"cameras_id":[1,2,3,4,8]},
@@ -156,14 +155,14 @@ from each camera with the ``Display`` field of the ``camera_nodes`` set to **Tru
    }
 
 The output of this query is formated by the ``JSON format latest images payload`` node, and passed on to the ``create data file``
-node.  If need be, the ``latest_images.json`` file may be created manually with the ``manually create\n latest_images.json file``
+node.  If need be, the ``latest_images.json`` file may be created manually with the ``manually create latest_images.json file``
 node.
 
 Configure/Edit the Directories
 ------------------------------
 .. image:: images/nodered_configuration_directories.jpg
 
-The ``Configuration Directories`` node contains the list of directories used with the **Image Librarian** flows.  The folders containing
+The ``Configuration Directories`` node contains the list of directories used by all the flows.  The folders containing
 ``YOUR_HOME_DIRECTORY`` require editing to match your installation.  These entries are used to create the **global**
 variables available to all the flows as seen below:
 
@@ -189,8 +188,8 @@ with the object detection results for each analyzed image.
 
 .. image:: images/nodered_id_objects_sub_flow.jpg
 
-INSERT INTO ImageObjects DB
----------------------------
+INSERT INTO image_objects TABLE
+-------------------------------
 This node processes the MQTT messages and inserts the object data into the ``image_objects`` table::
 
   {
@@ -209,11 +208,11 @@ This node processes the MQTT messages and inserts the object data into the ``ima
   "results":{"person":1}
   }
 
-Check License Plate of images from specified cameras
-----------------------------------------------------
-If the ``ALPR`` field of the ``camera_nodes`` Table is **True**, and a 'car', 'truck' or 'motorbike' appear in the image
+Check License Plate of images from ALPR enabled cameras
+-------------------------------------------------------
+If the ``ALPR`` field of the ``camera_nodes`` TABLE is **True**, and a 'car', 'truck' or 'motorbike' appear in the image
 this function node will build a query to select the images for ``ALPR SUB Flow`` processing.  The query is ``delayed 5 seconds``
-to allow for the object data to be stored in the ``image_objects`` Table.  The results of the ``imagehub DB`` are as follows::
+to allow for the object data to be stored in the ``image_objects`` TABLE.  The results of the ``imagehub DB`` are as follows::
 
    {
    "topic":
@@ -258,6 +257,8 @@ This function node selects two images from a list, and constructs a MQTT message
 
 ALPR SUB Flow
 =============
+.. image:: images/nodered_alpr_sub_flow.jpg
+
 The **ALPR SUBSCRIPTION Flow** receives the MQTT message results from ``MQTT_client.py``::
 
    {
@@ -283,15 +284,15 @@ The **ALPR SUBSCRIPTION Flow** receives the MQTT message results from ``MQTT_cli
    "_msgid":"7e6fe204.7c7cdc"
    }
 
-JSONize msg.payload and Results NULL or NOT
--------------------------------------------
-The messages are JSON'ized via the ``JSONize msg.payload`` node and the ``msg.results`` are tested for *NULL* or
-*NOT NULL* in the ``Results NULL or NOT`` node.
+JSONize msg.payload and ALPR Results NULL or NOT NULL
+-----------------------------------------------------
+The messages are JSON'ized via the ``JSONize msg.payload`` node and the ``msg.results`` is checked IF *NULL* or
+*NOT NULL* in the ``ALPR Results NULL or NOT NULL`` node.
 
-SELECT * FROM LicensePlates DB
-------------------------------
-If the ``msg.results`` are *NOT NULL* from the ``Results NULL or NOT`` node, a query is performed on the
-``msg.payload.results[0].plate.toUpperCase()`` to find the closest match via the ``SELECT * FROM LicensePlates DB`` node::
+NOT NULL - SELECT * FROM license_plates TABLE
+---------------------------------------------
+If the ``msg.results`` are *NOT NULL* from the ``ALPR Results NULL or NOT NULL`` node, a query is performed on the
+``msg.payload.results[0].plate.toUpperCase()`` to find the closest match via the ``NOT NULL - SELECT * FROM license_plates TABLE`` node::
 
   {
   "topic":
@@ -309,18 +310,32 @@ If the ``msg.results`` are *NOT NULL* from the ``Results NULL or NOT`` node, a q
   "datetime":"2021-06-08T09:23:34.783643"
   }
 
-IS NULL - INSERT INTO ALPR_Events DB
-------------------------------------
-If the ``msg.results`` are *NULL* from the ``Results NULL or NOT`` node, a query is performed on the
-``msg.payload.results[0].plate.toUpperCase()`` to find the closest match via the ``SELECT * FROM LicensePlates DB`` node::
+IS NULL - INSERT INTO alpr_events TABLE
+---------------------------------------
+If the ``msg.results`` are *NULL* from the ``ALPR Results NULL or NOT NULL`` node, a query is performed on the
+``msg.payload.results[0].plate.toUpperCase()`` to find the closest match via the ``IS NULL - INSERT INTO alpr_events TABLE`` node::
 
-Query Results of LicensePlates NULL or NOT
-------------------------------------------
+  {
+  "topic":
+     "INSERT INTO alpr_events (license_id, datetime, image_id, processing_time)
+     VALUES (:license_id, :datetime, :image_id, :processing_time)",
+  "payload":{"license_id":1,"datetime":"2021-06-09T17:59:51","image_id":"StreetView-RPiCam4-2021-06-09T17.59.42.223840.jpg","processing_time":110.603},
+  "qos":1,
+  "retain":false,
+  "_msgid":"2eb2307a.5551d",
+  "add_licenseplate":false,
+  "image":"StreetView-RPiCam4-2021-06-09T17.59.42.223840.jpg",
+  "processing_time":110.603,
+  "datetime":"2021-06-09T17:59:51"
+  }
+
+Query Results of license_plates NULL or NOT NULL
+------------------------------------------------
 This node checks the ``msg.payload[0]`` to see if it is *NULL* OR *NOT NULL*.
 
-INSERT INTO ALPR_Events DB
---------------------------
-If the ``Query Results of LicensePlates NULL or NOT`` is *NOT NULL*, the data is INSERT'd into the ``alpr_events`` Table
+NOT NULL - INSERT INTO alpr_events TABLE
+----------------------------------------
+If the ``Query Results of license_plates NULL or NOT NULL`` is *NOT NULL*, the data is INSERT'd into the ``alpr_events`` TABLE
 and ``msg.add_licenseplate`` is set to *false*::
 
    {
@@ -340,16 +355,35 @@ and ``msg.add_licenseplate`` is set to *false*::
    "add_licenseplate":false
    }
 
-INSERT INTO LicensePlates DB
-----------------------------
-If the ``Query Results of LicensePlates NULL or NOT`` is *NULL*, the data is INSERT'd into the ``license_plates`` Table
+IS NULL - INSERT INTO license_plates TABLE
+------------------------------------------
+If the ``Query Results of license_plates NULL or NOT NULL`` is *NULL*, the data is INSERT'd into the ``license_plates`` Table
 and ``msg.add_licenseplate`` is set to *true*::
 
+  {
+  "topic":
+     "INSERT INTO license_plates (license, color, type, identified)
+     VALUES (:license, :color, :type, :identified)",
+  "payload":{"license":"PDH6456","color":"unknown","type":"pickup truck","identified":"unknown"},
+  "qos":1,
+  "retain":false,
+  "_msgid":"5ba0f181.95898",
+  "plate":"PDH6456",
+  "image":"StreetView-RPiCam4-2021-06-09T11.10.58.338754.jpg",
+  "score":0.903,
+  "processing_time":99.411,
+  "vehicle_type":"pickup truck",
+  "datetime":"2021-06-09T11:11:06",
+  "add_licenseplate":true
+  }
 
-IF msg.add_licenseplate = true add ALPR_Event
----------------------------------------------
+IF msg.add_licenseplate = true INSERT INTO alpr_events TABLE
+------------------------------------------------------------
+This switch node checks the results of each ``imagehub DB`` node query for ``msg.add_licenseplate`` flag, and IF *True*
+routes the message to ``NOT NULL - INSERT INTO alpr_events TABLE`` to create a ``alpr_events`` entry for the
+**NEW** License Plate entry.
 
 CUSTOM: check for Newspaper vehicle
 -----------------------------------
-This is an example of monitoring ALPR Events for a specific License Plate.  When the plate is matched it sends an email
+This is an example of monitoring ALPR Events for a specific License Plate.  When the plate(s) are matched it sends an email
 or Text message to the specified address.
