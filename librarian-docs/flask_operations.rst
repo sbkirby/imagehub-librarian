@@ -46,6 +46,7 @@ NodeName
 ^^^^^^^^
 The ``NodeName`` is a descriptive name for the camera.  I choose to concatenate the ``node.name`` from the
 ``imagenode.yaml`` file with the ``cameras.P1.viewname`` (e.g. 'BirdFeeder' and 'RPiCam3').  (REQUIRED)
+
 ViewName
 ^^^^^^^^
 The ``ViewName`` field should match the ``cameras.P1.viewname`` field in the ``imagenode.yaml`` file as seen below (REQUIRED) ::
@@ -87,19 +88,24 @@ The ``ViewName`` field should match the ``cameras.P1.viewname`` field in the ``i
             draw_time_fontScale: 0.6
 
 .. image:: images/flask_new_camera.jpg
+
 CameraType
 ^^^^^^^^^^
 This is a handy spot to document the type of camera used or information of importance to you. (OPTIONAL)
+
 Display
 ^^^^^^^
 If checked or true, this will allow the camera images to be displayed in the desktop module ``dashboard.py``. (OPTIONAL)
+
 Check Objects
 ^^^^^^^^^^^^^
 If checked or true, this will allow the camera images to be checked for objects by ``MQTT_client.py``. (OPTIONAL)
+
 ALPR
 ^^^^
 If checked or true, this will allow the camera images to be checked by `PLATE RECOGNIZER <https://www.platerecognizer.com/>`_.
 You MUST setup an account with PLATE RECOGNIZER, and receive an ``API Token`` to activate and use their services. (OPTIONAL)
+
 ROI_name
 ^^^^^^^^
 This is name(s) found in ``cameras.P1.detectors.motion.roi_name`` field of the ``imagenode.yaml`` file located in the
@@ -160,9 +166,11 @@ RPi camera as seen below::
 This is the name of the Region of Interest (ROI) to watch by the **Image Librarian**.  For example, the ``imagenode.yaml``
 file above defines an ROI to watch for people approching the ``FrontDoor``.  Unfortunately, at this time only ONE ROI
 can be defined per camera.
+
 Message
 ^^^^^^^
 This is the ``Message`` used to send or notify you of a specific event.
+
 Text Enabled
 ^^^^^^^^^^^^
 If enabled, Text messages composed of the "Obect" + "Message" will be sent to the specified email address in ``email Google Voice``
