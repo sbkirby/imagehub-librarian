@@ -20,11 +20,6 @@ captured by **imagehub**:
     :height: 452px
     :align: center
     :alt: Example of Flask webpage
-.. image:: librarian-docs/images/image_of_dashboard.png
-    :width: 600px
-    :height: 340px
-    :align: center
-    :alt: Example of Dashboard View
 
 Additionally, this application is capable of detecting the objects of captured images.  If a 'car' is detected, this
 application is capable of performing Automatic License Plate Recognition (ALPR) on the captured image.  All of the
@@ -179,18 +174,24 @@ Next, configure each of the docker containers with files furnished by **imagehub
 
 MariaDB
 -------
-Log into MariaDB via Adminer. Connect to `http://localhost:9080 <http://localhost:9080>`_ ::
+Login
+^^^^^
+Log into MariaDB via **Adminer**. Connect to Adminer `http://localhost:9080 <http://localhost:9080>`_ ::
 
     server: mariadb
     user: root
     password: IOtSt4ckToorMariaDb
 
+Import imagehub database
+^^^^^^^^^^^^^^^^^^^^^^^^
 Import database located in the ``~/IOTstack/misc`` folder:
 ``Import » "Choose Files" imagehub_mariadb_database.sql and "Execute"``
 
 .. image:: librarian-docs/images/mariadb_import_database.jpg
 
-Setup privileges for user 'mariadbuser'
+Setup Privileges for mariadbuser
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Privileges for user 'mariadbuser' must be created.
 ``MySQL » mariadb » imagehub » Privileges » Create user``::
 
 	User: mariadbuser
@@ -262,6 +263,8 @@ account.
 
 Grafana
 -------
+Login
+^^^^^
 Log into Grafana `http://localhost:3000 <http://localhost:3000>`_ ::
 
     username: admin
@@ -365,7 +368,29 @@ sensor events of the network.
 
 
 Running **imagehub-librarian** in production
-==================================
+============================================
+House Keeping
+-------------
+This application can generate a large number of images that need to be purged on a routine basis.  The system needs
+to run a nightly python module ``purge_folders.py`` to remove the folders and images after a specified number of days.
+The number of days to keep is set in the ``msg.daystokeep`` value of the ``Routine Purge of Images and Db Entries``
+node in the **Image Librarian Flow**.
+
+A ``crotab`` entry needs to added to run the ``purge_folders.py`` each evening.  First, create a directory for the
+log files::
+
+  cd ~/IOTstack
+  mkdir logs
+
+Start the ``crontab`` editor::
+
+  sudo crontab -e
+
+Enter the following after the last line.  Replace ``YOUR_HOME_DIRECTORY`` with the appropriate location::
+
+  0 01 * * * /usr/bin/python3 /home/YOUR_HOME_DIRECTORY/IOTstack/purge_folders.py >/home/YOUR_HOME_DIRECTORY/IOTstack/logs/cronlog 2>&1
+
+Save and Exit the editor.  The above entry will run every morning at 1:00am.
 
 
 Additional Documentation
