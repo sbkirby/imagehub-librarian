@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_MYSQL",
-      "label": "MySQL",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "mysql",
-      "pluginName": "MySQL"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.5.1"
-    },
-    {
-      "type": "datasource",
-      "id": "mysql",
-      "name": "MySQL",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -48,14 +12,15 @@
       }
     ]
   },
+  "description": "Events of Image Librarian",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
+  "id": 2,
   "links": [],
   "panels": [
     {
-      "datasource": "${DS_MYSQL}",
+      "datasource": null,
       "description": "Number of object by date",
       "fieldConfig": {
         "defaults": {
@@ -119,7 +84,7 @@
       },
       "gridPos": {
         "h": 11,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 0
       },
@@ -323,7 +288,175 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_MYSQL}",
+      "datasource": null,
+      "description": "Temp and Humidity by datetime",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.1",
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "object"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n  CAST(Value as DECIMAL) AS \"Temp\",\r\n  UNIX_TIMESTAMP(datetime) AS \"time\"\r\nFROM events\r\nWHERE\r\n  $__timeFilter(datetime) and Event = 'Temp'\r\nGROUP BY datetime, camera_id\r\nORDER BY datetime",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ImageObjects",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "varchar",
+              "name": "",
+              "params": [
+                "object",
+                "=",
+                "'car'"
+              ],
+              "type": "expression"
+            },
+            {
+              "datatype": "varchar",
+              "name": "",
+              "params": [
+                "object",
+                "=",
+                "'person'"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n  CAST(Value as DECIMAL) AS \"Humidity\",\r\n  UNIX_TIMESTAMP(datetime) AS \"time\"\r\nFROM events\r\nWHERE\r\n  $__timeFilter(datetime) and Event = 'humidity'\r\nGROUP BY datetime, camera_id\r\nORDER BY datetime",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "ID"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "ImageObjects",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Temperature/Humidity Sensors",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
       "description": "How often a license plate appeared on our street",
       "fieldConfig": {
         "defaults": {
@@ -357,7 +490,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 124
+                "value": 117
               }
             ]
           },
@@ -369,7 +502,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 131
+                "value": 111
               }
             ]
           },
@@ -381,7 +514,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 157
+                "value": 101
               }
             ]
           },
@@ -393,7 +526,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": null
+                "value": 175
               }
             ]
           },
@@ -405,7 +538,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 100
+                "value": 62
               }
             ]
           }
@@ -413,7 +546,7 @@
       },
       "gridPos": {
         "h": 11,
-        "w": 14,
+        "w": 12,
         "x": 0,
         "y": 11
       },
@@ -490,6 +623,206 @@
       "timeShift": null,
       "title": "License Frequency",
       "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 60
+              },
+              {
+                "color": "green",
+                "value": 65
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 12,
+        "y": 11
+      },
+      "id": 7,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.1",
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  Value AS \"Value\"\nFROM events\nWHERE\n  $__timeFilter(datetime) AND\n  Event = \"Temp\" AND camera_id = 11\nORDER BY datetime DESC LIMIT 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "Value"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Value"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "events",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "name": "",
+              "params": [
+                "value",
+                "=",
+                "value"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "title": "Current Temp",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 40
+              },
+              {
+                "color": "blue",
+                "value": 60
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 11
+      },
+      "id": 8,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.1",
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\nValue\r\nFROM events\r\nWHERE\r\n  $__timeFilter(datetime) AND\r\n  Event = \"humidity\" AND camera_id = 11\r\nORDER BY datetime DESC LIMIT 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "Value"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Value"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "events",
+          "timeColumn": "datetime",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "name": "",
+              "params": [
+                "value",
+                "=",
+                "value"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "title": "Current Humidity",
+      "type": "gauge"
     }
   ],
   "refresh": "1m",
@@ -500,12 +833,12 @@
     "list": []
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "",
-  "title": "ALPR Events",
+  "timezone": "America/Chicago",
+  "title": "Image Librarian Events",
   "uid": "3Ml3MO2Mk",
-  "version": 18
+  "version": 27
 }
