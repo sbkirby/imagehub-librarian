@@ -42,13 +42,13 @@ for setting up your camera.
 
 .. image:: images/RPi_4B_Case_with_HQ_Camera_Module.png
 
-I am using the following equipment::
+I am using the following equipment:
 
-   Raspberry Pi 4 8GB
-   Raspberry Pi HQ Camera Module
-   35mm F1.6 APS-C Television TV Lens/CCTV Lens for 16mm C Mount Camera
-   3D Printed Case - `Raspberry Pi 4B Case for HQ Camera Module <https://www.thingiverse.com/thing:4660741>`_
-   `Adjustable Indoor/Outdoor Security Metal Wall Mount <https://www.amazon.com/gp/product/B06X6H8QDY>`_
+- Raspberry Pi 4 8GB
+- Raspberry Pi HQ Camera Module
+- `35mm F1.6 APS-C Television TV Lens/CCTV Lens for 16mm C Mount Camera <https://www.amazon.com/gp/product/B0773K3MXD>`_
+- 3D Printed Case - `Raspberry Pi 4B Case for HQ Camera Module <https://www.thingiverse.com/thing:4660741>`_
+- `Adjustable Indoor/Outdoor Security Metal Wall Mount <https://www.amazon.com/gp/product/B06X6H8QDY>`_
 
 I use the following ``imagenode.yaml`` settings for this camera::
 
