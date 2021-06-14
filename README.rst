@@ -218,12 +218,12 @@ select file: ``~/IOTstack/misc/Image_Librarian_Dashboard_flows.json``
 .. image:: librarian-docs/images/nodered_import_flow.jpg
     :alt: Import Flow - select JSON file
 
-The ``Image_Librarian_Dashboard_flows.json`` file import the *Image Librarian*, *ID Objects SUB* and
-*ALPR SUB* flows.  The *Image Librarian* flow is the primary flow that triggers events in the *ID Objects SUB* and
+The ``Image_Librarian_Dashboard_flows.json`` file import the *imagehub-librarian*, *ID Objects SUB* and
+*ALPR SUB* flows.  The *imagehub-librarian* flow is the primary flow that triggers events in the *ID Objects SUB* and
 *ALPR SUB* via MQTT messages passed between the other flows and the ``MQTT_client.py`` module.
 
 .. image:: librarian-docs/images/nodered_image_librarian_flow.jpg
-    :alt: Image Librarian Flow
+    :alt: imagehub-librarian Flow
 .. image:: librarian-docs/images/nodered_id_objects_sub_flow.jpg
     :alt: ID Objects SUB Flow
 .. image:: librarian-docs/images/nodered_alpr_sub_flow.jpg
@@ -231,7 +231,7 @@ The ``Image_Librarian_Dashboard_flows.json`` file import the *Image Librarian*, 
 
 Configure Directories
 ^^^^^^^^^^^^^^^^^^^^^
-The **Configuration Directories** node of the **Image Librarian** flow requires modification.  Double click the module, and
+The **Configuration Directories** node of the **imagehub-librarian** flow requires modification.  Double click the module, and
 edit each of the fields containing directories with ``YOUR_HOME_DIRECTORY``.
 
 .. image:: librarian-docs/images/nodered_configuration_directories.jpg
@@ -286,10 +286,10 @@ First, configure the database used by Grafana by going to menu ``Configuration -
 
 Import JSON Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-Next, install a JSON configuration file, ``ALPR_Events-grafana.json`` located in the ``~/IOTstack/misc`` folder, with charts and tables for the *imagehub* database.
+Next, install a JSON configuration file, ``Image_Librarian_Events_grafana.json`` located in the ``~/IOTstack/misc`` folder, with charts and tables for the *imagehub* database.
 Go to menu ``Dashboards -> Manage``::
 
-    Import -> ALPR_Events-grafana.json
+    Import -> Image_Librarian_Events_grafana.json
     Name: ALPR Events
     Folder: General
     MySQL: MySQL
@@ -374,7 +374,7 @@ House Keeping
 This application can generate a large number of images that need to be purged on a routine basis.  The system needs
 to run a nightly python module ``purge_folders.py`` to remove the folders and images after a specified number of days.
 The number of days to keep is set in the ``msg.daystokeep`` value of the ``Routine Purge of Images and Db Entries``
-node in the **Image Librarian Flow**.
+node in the **imagehub-librarian Flow**.
 
 A ``crotab`` entry needs to added to run the ``purge_folders.py`` each evening.  First, create a directory for the
 log files::
@@ -395,15 +395,15 @@ Save and Exit the editor.  The above entry will run every morning at 1:00am.
 
 Additional Documentation
 ========================
-- `How imagehub works <docs/imagehub-details.rst>`_.
-- `The imagehub Settings and the imagehub.yaml file <docs/settings-yaml.rst>`_.
+- `How ALPR works <librarian-docs/ALPR_operations.rst>`_.
+- `The Flask Image Librarian  <librarian-docs/flask_operations.rst>`_.
+- `Grafana setup and operations <librarian-docs/grafana_operations.rst>`_.
+- `Node-Red setup and operations <librarian-docs/node-red_operations.rst>`_.
+- `dashboard.py AND dashboard_jpg.py operations <librarian-docs/dashboard_operations.rst>`_.
+- `imagenode installation cheatsheet <librarian-docs/RPi_imagenode_installation_cheatsheet.rst>`_.
 - `Version History and Changelog <HISTORY.md>`_.
-- `Research and Development Roadmap <docs/research-roadmap.rst>`_.
-- `The imageZMQ classes that allow transfer of images <https://github.com/jeffbass/imagezmq>`_.
+- `The imagehub receives and stores images and event messages from multiple sources simultaneously <https://github.com/jeffbass/imagehub>`_.
 - `The imagenode program that captures and sends images <https://github.com/jeffbass/imagenode>`_.
-- `The larger farm automation / computer vision project <https://github.com/jeffbass/yin-yang-ranch>`_.
-  This project shows the overall system architecture. It also contains
-  links to my **PyCon 2020** talk video and slides explaining the project.
 
 Contributing
 ============
