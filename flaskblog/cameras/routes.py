@@ -19,7 +19,7 @@ cameras = Blueprint('cameras', __name__)
 @cameras.route("/cameras")
 def cameras_list():
     page = request.args.get('page', 1, type=int)
-    camera_list = CameraNodes.query.order_by(CameraNodes.ViewName).paginate(page=page, per_page=10)
+    camera_list = CameraNodes.query.order_by(CameraNodes.ViewName).paginate(page=page, per_page=50)
     return render_template('cameras.html', cameras=camera_list, title='Select Camera')
 
 
