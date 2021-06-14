@@ -117,10 +117,13 @@ Edit the ``data_directory`` field of ``imagehub.yaml`` to match your installatio
 At the time of this installation, Node-Red didn't allow for volumes outside of ``/home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data`` path.  Hence,
 the unusual ``imagehub_data`` location seen above.
 
-Install the **imagehub-librarian** package.  The following will install these files into the IOTstack folder::
+Install the **imagehub-librarian** package.  The following will install the package and move these files into the IOTstack folder::
 
     cd ~
-    git clone https://github.com/sbkirby/imagehub-librarian.git ~/IOTstack
+    git clone https://github.com/sbkirby/imagehub-librarian.git
+    cd imagehub-librarian
+    chmod +x copy_all.sh
+    ./copy_all.sh
     cd ~/IOTstack
 
 Several task are required prior to starting Docker.  Edit the openalpr_script.sh and change
@@ -407,6 +410,7 @@ Additional Documentation
 Acknowledgments
 ===============
 - **IOTstack** is a well maintained package for building a customized Docker IOT installation - `IOTstack <https://sensorsiot.github.io/IOTstack/Getting-Started/>`_.
-- **CoreyMSchafer/Flask_Blog** provided the basic structure for the **imagehub-librarian** Flask application - `CoreyMSchafer/code_snippets <https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog>`_.
+- **CoreyMSchafer/Flask_Blog** provided the basic structure for the **imagehub-librarian** Flask application -
+`CoreyMSchafer/code_snippets <https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog>`_.
 - **PyImageSearch** a great resource of code and knowledge for OpenCV - `PyImageSearch <https://www.pyimagesearch.com/>`_.
-- **Jeff Bass** the creator of **imagenode**,**imagehub** and **imagezmq** - `Ying Yang Ranch <https://github.com/jeffbass>`_.
+- **Jeff Bass** the creator of **imagenode**, **imagehub** and **imagezmq** - `Ying Yang Ranch <https://github.com/jeffbass>`_.
