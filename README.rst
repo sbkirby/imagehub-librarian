@@ -141,7 +141,8 @@ If a 'ALPR_API_TOKEN' is available from `Plate Recognizer <https://www.platereco
 
     nano config.json
 
-Build the OpenCV and Flask images for Docker.  Be sure to include the 'period' in the following commands::
+Build the OpenCV and Flask images for Docker.  Be sure to include the 'period' in the following commands. This will
+take a while to build these images::
 
     cd ~/IOTstack/docker
     docker build -f flask_Dockerfile -t flask:latest .
@@ -158,7 +159,13 @@ Edit the ``YOUR_HOME_DIRECTORY`` folder locations for Flask and opencv in the NE
 
     nano docker-compose.yml
 
-Tip: Pressing ``Ctrl + \\`` in nano will allow for multiple finds and replaces.
+Tip: Pressing ``Ctrl + \`` in nano will allow for multiple finds and replaces.
+
+Before Docker is started, a link to the image folder must be created for Flask.  Change ``YOUR_HOME_DIRECTORY`` to the
+appropriate folder name::
+
+    cd /home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static
+    ln -s /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data imagehub_data
 
 Docker can be started::
 
@@ -194,8 +201,8 @@ Import database located in the ``~/IOTstack/misc`` folder:
 
 Setup Privileges for mariadbuser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Privileges for user 'mariadbuser' must be created.
-``MySQL » mariadb » imagehub » Privileges » Create user``::
+Privileges for user 'mariadbuser' must be created.  Change to the ``imagehub`` database and set the ``Privileges``
+for the user ``mariadbuser``.  ``MySQL » mariadb » imagehub » Privileges » Create user``::
 
 	User: mariadbuser
 	Password: IOtSt4ckmariaDbPw
@@ -301,12 +308,6 @@ Go to menu ``Dashboards -> Manage``::
 
 Flask
 -----
-Before images are accessible from Flask, a link to the image folder must be created.  Change ``YOUR_HOME_DIRECTORY`` to the
-appropriate folder name::
-
-    cd /home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static
-    ln -s /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data imagehub_data
-
 Log into Flask and create a user for yourself at `http://localhost:5000 <http://localhost:5000>`_.
 
 
