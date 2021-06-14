@@ -392,7 +392,6 @@ Enter the following after the last line.  Replace ``YOUR_HOME_DIRECTORY`` with t
 
 Save and Exit the editor.  The above entry will run every morning at 1:00am.
 
-
 Additional Documentation
 ========================
 - `How ALPR works <librarian-docs/ALPR_operations.rst>`_.
@@ -405,14 +404,9 @@ Additional Documentation
 - `The imagehub receives and stores images and event messages from multiple sources simultaneously <https://github.com/jeffbass/imagehub>`_.
 - `The imagenode program that captures and sends images <https://github.com/jeffbass/imagenode>`_.
 
-Contributing
-============
-
-
 Acknowledgments
 ===============
-- **ZeroMQ** is a great messaging library with great documentation
-  at `ZeroMQ.org <http://zeromq.org/>`_.
-- **PyZMQ** serialization examples provided a starting point for **imageZMQ**.
-  See the
-  `PyZMQ documentation <https://pyzmq.readthedocs.io/en/latest/index.html>`_.
+- **IOTstack** is a well maintained package for building a customized Docker IOT installation - `IOTstack <https://sensorsiot.github.io/IOTstack/Getting-Started/>`_.
+- **CoreyMSchafer/Flask_Blog** provided the basic structure for the **imagehub-librarian** Flask application - `CoreyMSchafer/code_snippets <https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog>`_.
+- **PyImageSearch** a great resource of code and knowledge for OpenCV - `PyImageSearch <https://www.pyimagesearch.com/>`_.
+- **Jeff Bass** the creator of **imagenode**,**imagehub** and **imagezmq** - `Ying Yang Ranch <https://github.com/jeffbass>`_.
