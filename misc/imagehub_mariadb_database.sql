@@ -29,12 +29,12 @@ CREATE TABLE `camera_nodes` (
   `NodeName` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ViewName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `CameraType` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Display` tinyint(4) unsigned zerofill NOT NULL,
-  `Chk_Objects` tinyint(4) unsigned zerofill NOT NULL,
-  `ALPR` tinyint(4) unsigned zerofill NOT NULL,
+  `Display` tinyint(4) NOT NULL,
+  `Chk_Objects` tinyint(4) NOT NULL,
+  `ALPR` tinyint(4) NOT NULL,
   `ROI_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Message` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Text_Enabled` tinyint(4) unsigned zerofill NOT NULL,
+  `Text_Enabled` tinyint(4) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
