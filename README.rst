@@ -74,13 +74,8 @@ the **IOTstack** installed docker images.  To install **IOTstack**::
     sudo apt install -y curl git net-tools openssh-server htop apt-utils
     curl -fsSL https://raw.githubusercontent.com/SensorsIot/IOTstack/master/install.sh | bash
 
-After executing the above lines. Change directory to IOTstack and execute the ``menu.sh`` shell file::
-
-    cd ~/IOTstack
-    ./menu.sh
-
-This will install PIP and docker, and require a reboot.  Log in again and change directory to IOTstack
-and execute the ``menu.sh`` again and select "Build Stack"::
+This will check the system enviroment and install the necessary tools to complete the install...it may require a reboot.
+Log in again and change directory to IOTstack and execute the ``menu.sh`` again and select "Build Stack"::
 
     cd ~/IOTstack
     ./menu.sh
@@ -100,6 +95,8 @@ to complete before Docker is started.  To insure your Docker has not started::
     cd ~/IOTstack
     docker-compose down
 
+Install imagehub
+----------------
 Install **imagehub** in the IOTstack folder. Note: Do not follow the **imagehub** installation instructions.  Imagehub will run from
 a docker container. Therefore, the imagehub.service doesn't need to be configured and installed to run::
 
@@ -117,6 +114,8 @@ Edit the ``data_directory`` field of ``imagehub.yaml`` to match your installatio
 At the time of this installation, Node-Red didn't allow for volumes outside of ``/home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data`` path.  Hence,
 the unusual ``imagehub_data`` location seen above.
 
+Install imagehub-librarian
+--------------------------
 Install the **imagehub-librarian** package.  The following will install the package and move these files into the IOTstack folder::
 
     cd ~
@@ -135,6 +134,8 @@ Make ``openalpr_script.sh`` executable::
 
     chmod +x openalpr_script.sh
 
+Edit config.json
+----------------
 Edit the ``config.json`` file, and replace ``YOUR_HOME_DIRECTORY`` to the appropriate folder name.  Configure
 the email entries to match your email information ('MAIL_SERVER', 'MAIL_PORT', 'MAIL_USE_TLS', 'MAIL_USERNAME', 'MAIL_PASSWORD').
 If a 'ALPR_API_TOKEN' is available from `Plate Recognizer <https://www.platerecognizer.com/>`_, enter it in the field.
@@ -142,6 +143,8 @@ The 'ALPR_regions' should set to your areas Region Code.  Refer to these codes i
 
     nano config.json
 
+Build OpenCVf and Flask Docker Images
+-------------------------------------
 Build the OpenCV and Flask images for Docker.  Be sure to include the 'period' in the following commands. This will
 take a while to build these images::
 
@@ -149,6 +152,8 @@ take a while to build these images::
     docker build -f flask_Dockerfile -t flask:latest .
     docker build -f opencv_Dockerfile -t opencv:latest .
 
+Configure docker-compose.yml file
+---------------------------------
 Rename the ``docker-compose.yml`` file built by **IOTstack** and replace it with the file furnished by
 **imagehub-librarian**::
 
@@ -162,12 +167,16 @@ Edit the ``YOUR_HOME_DIRECTORY`` folder locations for Flask and opencv in the NE
 
 Tip: Pressing ``Ctrl + \`` in nano will allow for multiple finds and replaces.
 
+Create link to imagehub Images for Flask access
+-----------------------------------------------
 Before Docker is started, a link to the image folder must be created for Flask.  Change ``YOUR_HOME_DIRECTORY`` to the
 appropriate folder name::
 
     cd /home/YOUR_HOME_DIRECTORY/IOTstack/flaskblog/static
     ln -s /home/YOUR_HOME_DIRECTORY/IOTstack/volumes/nodered/data/imagehub_data imagehub_data
 
+Start Docker
+------------
 Docker can be started::
 
     cd ~/IOTstack
@@ -309,7 +318,8 @@ Go to menu ``Dashboards -> Manage``::
 
 Flask
 -----
-Log into Flask and create a user for yourself at `http://localhost:5000 <http://localhost:5000>`_.
+Log into Flask and create a user for yourself at `http://localhost:5000 <http://localhost:5000>`_.  Add any cameras to the
+the database.  Refer to `Flask Operations <librarian-docs/flask_operations.rst>`_ for more details.
 
 
 Running imagehub-librarian
