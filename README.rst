@@ -31,7 +31,7 @@ sections of **imagehub-librarian**.
 Overview
 ========
 
-Jeff Bass's **imagehub** application is the backbone of this application.  It is the "receive and store" part of a
+The **imagehub** application is the backbone of this application.  It is the "receive and store" part of a
 distributed computer vision pipeline that is run on multiple computers. Multiple Raspberry Pi (and other) computers
 run **imagenode** to capture images, detect motion, light, temperature values, etc. **Imagenode** then sends event
 messages and selected images to **imagehub**, which files the events and images for later analysis.  Typically,
@@ -39,8 +39,8 @@ messages and selected images to **imagehub**, which files the events and images 
 
 By design, **imagehub** is a very simple program. It does 2 things:
 
-1. It receives images and stores them.
-2. It receives event messages and logs them.
+1. It receives images and sensor events (e.g. temperature, humidity, light) and stores them.
+2. It receives **imagenode** status messages and logs them.
 
 It does this from multiple sources simultaneously. The sources are typically a bunch of Raspberry Pi computers with
 PiCameras and temperature sensors. Keeping **imagehub** simple allows it to be fast enough to reliably store data from
@@ -412,7 +412,6 @@ Additional Documentation
 Acknowledgments
 ===============
 - **IOTstack** is a well maintained package for building a customized Docker IOT installation - `IOTstack <https://sensorsiot.github.io/IOTstack/Getting-Started/>`_.
-- **CoreyMSchafer/Flask_Blog** provided the basic structure for the **imagehub-librarian** Flask application -
-`CoreyMSchafer/code_snippets <https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog>`_.
+- **CoreyMSchafer/Flask_Blog** provided the basic structure for the **imagehub-librarian** Flask application - `CoreyMSchafer/code_snippets <https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog>`_.
 - **PyImageSearch** a great resource of code and knowledge for OpenCV - `PyImageSearch <https://www.pyimagesearch.com/>`_.
 - **Jeff Bass** the creator of **imagenode**, **imagehub** and **imagezmq** - `Ying Yang Ranch <https://github.com/jeffbass>`_.
