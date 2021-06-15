@@ -128,6 +128,7 @@ Install the **imagehub-librarian** package.  The following will install the pack
 Several task are required prior to starting Docker.  Edit the openalpr_script.sh and change
 ``YOUR_HOME_DIRECTORY`` to the appropriate folder name::
 
+    cd ~/IOTstack
     nano openalpr_script.sh
 
 Make ``openalpr_script.sh`` executable::
@@ -138,13 +139,15 @@ Edit config.json
 ----------------
 Edit the ``config.json`` file, and replace ``YOUR_HOME_DIRECTORY`` to the appropriate folder name.  Configure
 the email entries to match your email information ('MAIL_SERVER', 'MAIL_PORT', 'MAIL_USE_TLS', 'MAIL_USERNAME', 'MAIL_PASSWORD').
-If a 'ALPR_API_TOKEN' is available from `Plate Recognizer <https://www.platerecognizer.com/>`_, enter it in the field.
-The 'ALPR_regions' should set to your areas Region Code.  Refer to these codes in the `Countries - ALPR API Documentation <https://docs.platerecognizer.com/#countries>`_::
+If a ``ALPR_API_TOKEN`` is available from `Plate Recognizer <https://www.platerecognizer.com/>`_, enter it in the field.
+The ``ALPR_regions`` should set to your areas Region Code.  Refer to these codes in the `Countries - ALPR API Documentation <https://docs.platerecognizer.com/#countries>`_.
+Refer to `ALPR Operations <librarian-docs/ALPR_operations.rst>`_ for additional information::
 
+    cd ~/IOTstack
     nano config.json
 
-Build OpenCVf and Flask Docker Images
--------------------------------------
+Build OpenCV and Flask Docker Images
+------------------------------------
 Build the OpenCV and Flask images for Docker.  Be sure to include the 'period' in the following commands. This will
 take a while to build these images::
 
@@ -177,7 +180,7 @@ appropriate folder name::
 
 Start Docker
 ------------
-Docker can be started::
+Docker can be started from the ``IOTstack`` folder::
 
     cd ~/IOTstack
     docker-compose up -d
