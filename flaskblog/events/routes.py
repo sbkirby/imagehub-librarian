@@ -18,8 +18,8 @@ events = Blueprint('events', __name__)
 @events.route("/events")
 def events_list():
     page = request.args.get('page', 1, type=int)
-    event_list = Events.query.order_by(EventsForm.ID.desc()).paginate(page=page, per_page=30)
-    return render_template('events.html', events=event_list, title='Events')
+    events_list = Events.query.order_by(Events.hubEvent.desc()).paginate(page=page, per_page=30)
+    return render_template('events.html', events=events_list, title='Events')
 
 
 @events.route("/event/<int:event_id>")
@@ -44,7 +44,7 @@ def update_event(event_id):
         event.ROI_name = form.ROI_name.data
         db.session.commit()
         flash('Your Event has been updated!', 'success')
-        return redirect(url_for('events.event', event_id=event.ID))
+        return redirect(url_for('events.event', event_id=event.hubEvent))
     elif request.method == 'GET':
         form.datetime.data = event.datetime
         form.hubEvent.process_data(event.hubEvent)
@@ -59,20 +59,20 @@ def update_event(event_id):
 @events.route("/event/last_events")
 def last_events():
     page = request.args.get('page', 1, type=int)
-    events = Events.query.filter_by(camera_id=camera.ID)\
+    events_list = Events.query.filter_by(camera_id=camera.ID)\
         .order_by(Events.hubEvent.desc())\
         .paginate(page=page, per_page=50)
-    return render_template('camera_events.html', events=events, camera=camera, title='Events: ' + camera.NodeName)
+    return render_template('camera_events.html', events=events_list, camera=camera, title='Events: ' + camera.NodeName)
 
 
 @events.route("/event/<int:camera_id>/events")
 def camera_events(camera_id):
     page = request.args.get('page', 1, type=int)
     camera = CameraNodes.query.get_or_404(camera_id)
-    events = Events.query.filter_by(camera_id=camera.ID)\
+    events_list = Events.query.filter_by(camera_id=camera.ID)\
         .order_by(Events.hubEvent.desc())\
         .paginate(page=page, per_page=50)
-    return render_template('camera_events.html', events=events, camera=camera, title='Events: ' + camera.NodeName)
+    return render_template('camera_events.html', events=events_list, camera=camera, title='Events: ' + camera.NodeName)
 
 
 @events.route("/event/<int:event_id>/delete", methods=['POST'])
@@ -89,22 +89,9 @@ def delete_event(event_id):
 # @login_required
 def latest_events():
     page = request.args.get('page', 1, type=int)
-    event_list = db.session.query(Events.camera_id, func.max(Events.hubEvent).label("max_hubEvent"), Events.Event, Events.Value, Events.ROI_name)\
+    events_list = db.session.query(Events.camera_id, func.max(Events.hubEvent).label("max_hubEvent"), Events.Event, Events.Value, Events.ROI_name)\
         .group_by(Events.camera_id) \
         .filter(Events.camera_id.in_([1, 2, 3, 4, 8])) \
         .paginate(page=page, per_page=50)
-    return render_template('latest_events.html', title='Latest Events for each Camera', events=event_list)
+    return render_template('latest_events.html', title='Latest Events for each Camera', events=events_list)
 
-    # .filter(Events.camera_id.in_([1, 2, 3, 4, 8])) \
-    # .group_by(Events.camera_id) \
-    # .join(CameraNodes, CameraNodes.ID == Events.camera_id) \
-
-    # .order_by(Events.hubEvent) \
-        # .select(func.max(Events.hubEvent)) \
-
-    # events = Events.query(Events.query(Events.camera_id, select(func.max()).select_from(Events.hubEvent)))\
-    #     .filter(Events.camera_id.in_([1,2,3,4,8]))\
-    #     .group_by(Events.camera_id).alias('latest_events')\
-    #     .join(Events, CameraNodes.ID == latest_events.camera_id)\
-    #     .and_(Events.hubEvent == latest_events.hubEvent)\
-    #     .paginate(page=page, per_page=50)
