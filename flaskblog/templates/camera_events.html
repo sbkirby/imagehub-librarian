@@ -18,9 +18,9 @@
     {% for page_num in events.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
     {% if page_num %}
     {% if events.page == page_num %}
-    <a class="btn btn-info mb-4" href="{{ url_for('events.events_list', page=page_num) }}">{{ page_num }}</a>
+    <a class="btn btn-info mb-4" href="{{ url_for('events.camera_events', camera_id=camera.ID, page=page_num) }}">{{ page_num }}</a>
     {% else %}
-    <a class="btn btn-outline-info mb-4" href="{{ url_for('events.events_list', page=page_num) }}">{{ page_num }}</a>
+    <a class="btn btn-outline-info mb-4" href="{{ url_for('events.camera_events', camera_id=camera.ID, page=page_num) }}">{{ page_num }}</a>
     {% endif %}
     {% else %}
     ...
